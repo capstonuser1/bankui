@@ -1,0 +1,29 @@
+
+.menu {
+    background-color: #002266;
+    padding: 12px 20px;
+
+}
+.menu-list {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: 20px
+
+}
+.menu-list li {
+    display: inline;
+}
+.menu-link {
+    color: #ffffff;
+    text-decoration: none;
+    font-weight: bold;
+}
+.menu-link:hover {
+    color:#ffcc00;
+}
+.menu-link.active {
+    color: #ffcc00;
+    border-bottom: 2px solid #ffcc00;
+}
