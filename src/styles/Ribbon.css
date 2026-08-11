@@ -1,0 +1,35 @@
+.floating-ribbon {
+   
+position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 12px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 600;
+    color: white;
+
+    z-index: 9999;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+.close-btn {
+    float: right;
+    background: transparent;
+    border: none;
+    color:white;
+    cursor: pointer;
+    font-size: 16px;
+}
+.success {
+    background-color:#2e7d32;
+}
+.warning {
+    background-color: #ed6c02
+}
+.info {
+    background-color: #1976d2;
+}
+.error {
+    background-color: #d32f2f;
+}
