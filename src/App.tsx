@@ -11,22 +11,38 @@ import { Header } from './components/Header';
 import { AccountList } from './components/AccountList';
 import type { Account } from './api/types';
 import './styles/App.css';
-//import { getAccounts, getCustomerTransactions } from './api/client';
+import { getAccounts } from './api/client';
 import { TransferForm } from './components/TransferForm';
 import { useAuth } from './auth/AuthContext';
 import { SignInScreen } from './components/SignInScreen';
-import { getAccounts } from './api/client';
-import { CustomerTransactions } from './components/CustomerTransactions';
-//import { CustomerTransactions } from './components/CustomerTransactions';
-
+import { DepositWithdrawForm } from './components/DepositWithdrawForm';
+import Menu from './components/Menu';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+//import Ribbon from './components/Ribbon';
 export function App() {
   const { user, loading: authLoading } = useAuth();
 
   const [accounts, setAccounts] = useState<Account[]>([]);
-  //const [transactions, setTransactions] = useState<TransactionList[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-
+/*  const [ribbonMessage, setRibbonMessage] = useState<string | null>(null);
+ const [ribbonType, setRibbonType] = useState<string | null>(null);
+ const [ribbonError, setRibbonError] = useState<string | null>(null);
+ const [visible, setVisible] = useState<boolean>(false);
+ const loadRibbonMessage = useCallback(async () => {
+    try {
+      const ribbonMsg = await getRibbonMsg();
+      setRibbonMessage(ribbonMsg);
+      setRibbonType(ribbonMsg ? 'warning' : 'info');
+      setRibbonError(null);
+    } catch (e) {
+      const message = e instanceof Error ? e.message : 'Unknown error';
+      setRibbonError(message);
+      setRibbonMessage(null);
+      setRibbonType('error');
+      console.error('Ribbon message error:', message);
+    }
+  }, []); */
   const loadAccounts = useCallback(async () => {
     setLoading(true);
     setError(null);
@@ -40,42 +56,63 @@ export function App() {
     }
   }, []);
 
-  // const loadTransactions = useCallback(async () => {
-  //   setLoading(true);
-  //   setError(null);
-  //   try {
-  //     const data = await getCustomerTransactions("AC001");
-  //     setTransactions(data);
-  //   } catch (e) {
-  //     setError(e instanceof Error ? e.message : 'Unknown error occurred');
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // }, []);
-
   useEffect(() => {
     if (user) {
       loadAccounts();
-      // loadTransactions();
+      // loadRibbonMessage();
+    }else{
+    /*  setRibbonMessage(null);
+      setRibbonType(null);
+      setRibbonError(null);
+      setVisible(false); */
     }
-  },
-    //[user, loadAccounts, loadTransactions]);
-    [user, loadAccounts]);
+  }, [user, loadAccounts]);
+ /* 
+  }, [user, loadAccounts, loadRibbonMessage]);
+ useEffect(() => {
+    if (!ribbonMessage) {
+      setVisible(false);
+      return;
+    }
 
+    setVisible(true);
+    const timer = window.setTimeout(() => {
+      setVisible(false);
+    }, 5000);
+
+    return () => window.clearTimeout(timer);
+  }, [ribbonMessage]); 
+  after  header
+     {user && (
+        <Ribbon
+          visible={visible}
+          onClose={() => setVisible(false)}
+          message={ribbonMessage ?? ribbonError ?? 'No ribbon message available'}
+          type={ribbonType ?? 'info'}
+        />
+      )} 
+  */
   return (
     <div className="App">
       <Header />
+      <BrowserRouter>
+   <Menu />
+   <Routes>    
+    <Route path="/deposits" element={<DepositWithdrawForm accounts={accounts} onTransferComplete={loadAccounts} />} />
+    <Route path="/" element={<TransferForm accounts={accounts} onTransferComplete={loadAccounts} />} />
+   </Routes>
       <main>
         {authLoading && <p className="status-message">Loading user info...</p>}
         {!authLoading && !user && <SignInScreen />}
         {!authLoading && user && (
           <>
             <AccountList accounts={accounts} loading={loading} error={error} />
-            <TransferForm accounts={accounts} onTransferComplete={loadAccounts} />
-            <CustomerTransactions accountId={accounts[0]?.id || ''} />
+            <TransferForm accounts={accounts} onTransferComplete={loadAccounts} />            
           </>
         )}
       </main>
+       </BrowserRouter>
     </div>
+   
   );
 }
