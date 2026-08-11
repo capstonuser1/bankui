@@ -16,6 +16,8 @@ import { TransferForm } from './components/TransferForm';
 import { useAuth } from './auth/AuthContext';
 import { SignInScreen } from './components/SignInScreen';
 import { DepositWithdrawForm } from './components/DepositWithdrawForm';
+import Menu from './components/Menu';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 //import Ribbon from './components/Ribbon';
 export function App() {
   const { user, loading: authLoading } = useAuth();
@@ -93,18 +95,24 @@ export function App() {
   return (
     <div className="App">
       <Header />
-   
+      <BrowserRouter>
+   <Menu />
+   <Routes>    
+    <Route path="/deposits" element={<DepositWithdrawForm accounts={accounts} onTransferComplete={loadAccounts} />} />
+    <Route path="/" element={<TransferForm accounts={accounts} onTransferComplete={loadAccounts} />} />
+   </Routes>
       <main>
         {authLoading && <p className="status-message">Loading user info...</p>}
         {!authLoading && !user && <SignInScreen />}
         {!authLoading && user && (
           <>
             <AccountList accounts={accounts} loading={loading} error={error} />
-            <TransferForm accounts={accounts} onTransferComplete={loadAccounts} />
-             <DepositWithdrawForm accounts={accounts} onTransferComplete={loadAccounts} />
+            <TransferForm accounts={accounts} onTransferComplete={loadAccounts} />            
           </>
         )}
       </main>
+       </BrowserRouter>
     </div>
+   
   );
 }
