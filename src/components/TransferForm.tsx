@@ -11,6 +11,9 @@ import { useState } from 'react';
 import { postTransfer } from '../api/client';
 import type { Account } from '../api/types';
 import { formatCurrency } from '../utils/format';
+import { AccountOperation } from '../enums/Transfer';
+
+
 
 type TransferFormProps = {
   accounts: Account[];
@@ -21,6 +24,7 @@ export function TransferForm({ accounts, onTransferComplete }: TransferFormProps
   const [fromAccount, setFromAccount] = useState<string>('');
   const [toAccount, setToAccount] = useState<string>('');
   const [amount, setAmount] = useState<string>('');
+  const [accountOperation, setAccountOperation] = useState<AccountOperation>(AccountOperation.Transfer);
 
   const [submitting, setSubmitting] = useState<boolean>(false);
   const [message, setMessage] = useState<string | null>(null);
@@ -34,6 +38,23 @@ export function TransferForm({ accounts, onTransferComplete }: TransferFormProps
     setSubmitting(true);
     setMessage(null);
     setMessageType(null);
+
+    if (accountOperation === AccountOperation.ReviewTransactions) {
+      setMessage('Review Transactions selected. Implement review flow here.');
+
+      /** TODO: Implement review transaction logic
+       * define the state for transactions and loading and error
+       * call the getCustomerTransactions function from the api/client.ts file
+       * pass the fromAccount as the accountId to the function
+       * set the transactions state with the result
+       * handle loading and error states accordingly
+       */
+
+
+      setMessageType('success');
+      setSubmitting(false);
+      return;
+    }
 
     try {
       const result = await postTransfer({
@@ -70,10 +91,26 @@ export function TransferForm({ accounts, onTransferComplete }: TransferFormProps
     );
   }
 
+  const resetForm = () => {
+    setFromAccount('');
+    setToAccount('');
+    setAmount('');
+  };
+
   return (
     <section className="transfer-form">
-      <h2>Transfer Money</h2>
+      <h2>Account Operations</h2>
       <form onSubmit={handleSubmit}>
+        <div className="form-row">
+          <label htmlFor="accountOperation">Select Operation</label>
+          <select
+            id="accountOperation"
+            value={accountOperation}
+            onChange={(e) => setAccountOperation(e.target.value as AccountOperation)}          >
+            <option value={AccountOperation.Transfer}>Transfer</option>
+            <option value={AccountOperation.ReviewTransactions}>Review Transactions</option>
+          </select>
+        </div>
         <div className="form-row">
           <label htmlFor="fromAccount">From Account</label>
           <select
@@ -92,7 +129,10 @@ export function TransferForm({ accounts, onTransferComplete }: TransferFormProps
         </div>
 
         <div className="form-row">
-          <label htmlFor="toAccount">To Account Number</label>
+          <label htmlFor="toAccount"
+            style={{ display: accountOperation === AccountOperation.ReviewTransactions ? 'none' : 'block' }}>
+            To Account Number
+          </label>
           <input
             id="toAccount"
             type="text"
@@ -100,11 +140,16 @@ export function TransferForm({ accounts, onTransferComplete }: TransferFormProps
             value={toAccount}
             onChange={(e) => setToAccount(e.target.value)}
             required
+            disabled={accountOperation === AccountOperation.ReviewTransactions}
+            style={{ display: accountOperation === AccountOperation.ReviewTransactions ? 'none' : 'block' }}
           />
         </div>
 
         <div className="form-row">
-          <label htmlFor="amount">Amount</label>
+          <label htmlFor="amount"
+            style={{ display: accountOperation === AccountOperation.ReviewTransactions ? 'none' : 'block' }}>
+            Amount
+          </label>
           <input
             id="amount"
             type="number"
@@ -114,15 +159,24 @@ export function TransferForm({ accounts, onTransferComplete }: TransferFormProps
             value={amount}
             onChange={(e) => setAmount(e.target.value)}
             required
+            disabled={accountOperation === AccountOperation.ReviewTransactions}
+            style={{ display: accountOperation === AccountOperation.ReviewTransactions ? 'none' : 'block' }}
           />
         </div>
 
-        <button type="submit" disabled={submitting}>
-          {submitting ? 'Submitting...' : 'Transfer'}
-        </button>
+        <div className="button-group">
+          <button type="submit" disabled={submitting}>
+            {submitting ? 'Submitting...' : accountOperation === AccountOperation.Transfer ? 'Transfer' : 'Review Transactions'}
+          </button>
+          {/* Todo: Add a reset button. on click it should reset the form fields . use the resetForm function */}
+          <button type="button" onClick={resetForm} disabled={submitting}>
+            Reset
+          </button>
+        </div>
 
         {message && <p className={`form-message ${messageType}`}>{message}</p>}
       </form>
     </section>
+
   );
 }

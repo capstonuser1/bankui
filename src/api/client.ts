@@ -8,7 +8,7 @@
  * function signatures.
  */
 
-import type { Account, TransferRequest, TransferResponse, User } from './types';
+import type { Account, TransactionList, TransferRequest, TransferResponse, User } from './types';
 
 export async function getCurrentUser(): Promise<User | null> {
   const response = await fetch('/api/me', { headers: { Accept: 'application/json' } });
@@ -30,6 +30,24 @@ export async function getAccounts(): Promise<Account[]> {
   }
   return response.json();
 }
+
+/**TODO: Implement the actual API call to fetch customer transactions based on the account ID */
+
+export async function getCustomerTransactions(accountId: string): Promise<TransactionList[]> {
+  const dummyTransactions: TransactionList[] = [
+    { transactionId: '1', accountId: 'acc1', type: 'DEPOSIT', amount: 1000, status: 'FAILED', date: '2023-01-01', desc: 'User deposited money.' },
+    { transactionId: '2', accountId: 'acc1', type: 'WITHDRAWAL', amount: -500, status: 'COMPLETE', date: '2023-01-02', desc: 'User withdrew money.' },
+  ];
+  const response = dummyTransactions;
+  // const response = await fetch(`/api/accounts/${accountId}`, { headers: { Accept: 'application/json' } });
+  // if (!response.ok) {
+  // if (!response) {
+  //   throw new Error(`Failed to load transactions: ${response.status}`);
+  // }
+  // //return response.json();
+  return response;
+}
+
 
 export async function postTransfer(request: TransferRequest): Promise<TransferResponse> {
   const response = await fetch('/api/transfers', {

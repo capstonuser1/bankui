@@ -41,6 +41,7 @@ export function AccountList({ accounts, loading, error }: AccountListProps) {
             <tr key={account.id}>
               <td>{account.id}</td>
               <td>{account.accountType}</td>
+              <td>{account.status}</td>
               <td>{formatCurrency(account.balance)}</td>
             </tr>
           ))}

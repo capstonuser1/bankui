@@ -174,3 +174,9 @@ main {
   color: #c53030;
   border: 1px solid #feb2b2;
 }
+
+.button-group {
+  display: flex;
+  gap: 10px;
+  /* Adjust spacing as needed */
+}

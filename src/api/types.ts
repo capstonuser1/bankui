@@ -14,6 +14,7 @@ export type Account = {
   customerId: string;
   accountType: AccountType;
   balance: number;
+  status: string; // AccountStatus;
 };
 
 export type User = {
@@ -34,6 +35,16 @@ export type Transaction = {
   account1: string;
   account2: string | null;
   status: TransactionStatus;
+};
+
+export type TransactionList = {
+  transactionId: string;
+  accountId: string;
+  type: TransactionType;
+  amount: number;
+  status: TransactionStatus;
+  date: string;
+  desc: string;
 };
 
 export type TransferRequest = {

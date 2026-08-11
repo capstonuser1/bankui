@@ -11,15 +11,19 @@ import { Header } from './components/Header';
 import { AccountList } from './components/AccountList';
 import type { Account } from './api/types';
 import './styles/App.css';
-import { getAccounts } from './api/client';
+//import { getAccounts, getCustomerTransactions } from './api/client';
 import { TransferForm } from './components/TransferForm';
 import { useAuth } from './auth/AuthContext';
 import { SignInScreen } from './components/SignInScreen';
+import { getAccounts } from './api/client';
+import { CustomerTransactions } from './components/CustomerTransactions';
+//import { CustomerTransactions } from './components/CustomerTransactions';
 
 export function App() {
   const { user, loading: authLoading } = useAuth();
 
   const [accounts, setAccounts] = useState<Account[]>([]);
+  //const [transactions, setTransactions] = useState<TransactionList[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -36,11 +40,27 @@ export function App() {
     }
   }, []);
 
+  // const loadTransactions = useCallback(async () => {
+  //   setLoading(true);
+  //   setError(null);
+  //   try {
+  //     const data = await getCustomerTransactions("AC001");
+  //     setTransactions(data);
+  //   } catch (e) {
+  //     setError(e instanceof Error ? e.message : 'Unknown error occurred');
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // }, []);
+
   useEffect(() => {
     if (user) {
       loadAccounts();
+      // loadTransactions();
     }
-  }, [user, loadAccounts]);
+  },
+    //[user, loadAccounts, loadTransactions]);
+    [user, loadAccounts]);
 
   return (
     <div className="App">
@@ -52,6 +72,7 @@ export function App() {
           <>
             <AccountList accounts={accounts} loading={loading} error={error} />
             <TransferForm accounts={accounts} onTransferComplete={loadAccounts} />
+            <CustomerTransactions accountId={accounts[0]?.id || ''} />
           </>
         )}
       </main>
