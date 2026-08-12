@@ -38,10 +38,10 @@ export function AccountList({ accounts, loading, error }: AccountListProps) {
         </thead>
         <tbody>
           {accounts.map((account) => (
-            <tr key={account.id}>
-              <td>{account.id}</td>
+            <tr key={account.accountNumber}>
+              <td>{account.accountNumber}</td>
               <td>{account.accountType}</td>
-              <td>{account.status}</td>
+              <td>{account.accountStatus}</td>
               <td>{formatCurrency(account.balance)}</td>
             </tr>
           ))}

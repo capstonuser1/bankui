@@ -10,11 +10,13 @@
 export type AccountType = 'SAVINGS' | 'CHECKING';
 
 export type Account = {
-  id: string;
+  accountId: number;
+  accountNumber: string;
   customerId: string;
   accountType: AccountType;
   balance: number;
-  status: string; // AccountStatus;
+  accountStatus: string; // AccountStatus;
+  openedDate: string;
 };
 
 export type User = {
