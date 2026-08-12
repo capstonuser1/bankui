@@ -34,9 +34,9 @@ export function App() {
   const [visible, setVisible] = useState<boolean>(false);
   const loadFlashMessage = useCallback(async () => {
     try {
-      const ribbonMsg = await getFlashMessage();
-      setFlashMessage(ribbonMsg ? ribbonMsg : "default message" );
-      setFlashType(ribbonMsg ? 'warning' : 'info');
+      const flashMsg = await getFlashMessage();
+      setFlashMessage(flashMsg ? flashMsg : "default message" );
+      setFlashType(flashMsg ? 'warning' : 'info');
       setFlashError(null);
     } catch (e) {
       const message = e instanceof Error ? e.message : 'Unknown error';
