@@ -12,6 +12,7 @@ import { postTransfer } from '../api/client';
 import type { Account } from '../api/types';
 import { formatCurrency } from '../utils/format';
 import { AccountOperation } from '../enums/Transfer';
+import { CustomerTransactions } from './CustomerTransactions';
 
 
 
@@ -25,7 +26,7 @@ export function TransferForm({ accounts, onTransferComplete }: TransferFormProps
   const [toAccount, setToAccount] = useState<string>('');
   const [amount, setAmount] = useState<string>('');
   const [accountOperation, setAccountOperation] = useState<AccountOperation>(AccountOperation.Transfer);
-
+  const [showTransactions, setShowTransactions] = useState(false);
   const [submitting, setSubmitting] = useState<boolean>(false);
   const [message, setMessage] = useState<string | null>(null);
   const [messageType, setMessageType] = useState<'success' | 'error' | null>(null);
@@ -40,22 +41,25 @@ export function TransferForm({ accounts, onTransferComplete }: TransferFormProps
     setMessageType(null);
 
     if (accountOperation === AccountOperation.ReviewTransactions) {
-      setMessage('Review Transactions selected. Implement review flow here.');
+      if (!fromAccount) {
+        setMessage('Please select a source account first.');
+        setMessageType('error');
+        setSubmitting(false);
+        return;
+      }
 
-      /** TODO: Implement review transaction logic
-       * define the state for transactions and loading and error
-       * call the getCustomerTransactions function from the api/client.ts file
-       * pass the fromAccount as the accountId to the function
-       * set the transactions state with the result
-       * handle loading and error states accordingly
-       */
-
-
+      setShowTransactions(true);
+      setMessage(`Showing recent transactions for ${fromAccount}`);
       setMessageType('success');
       setSubmitting(false);
       return;
     }
-
+    // const handleOperationChange = (value: AccountOperation) => {
+    //   setAccountOperation(value);
+    //   if (value !== AccountOperation.ReviewTransactions) {
+    //     setShowTransactions(false);
+    //   }
+    // };
     try {
       const result = await postTransfer({
         fromAccountNumber: fromAccount,
@@ -91,12 +95,27 @@ export function TransferForm({ accounts, onTransferComplete }: TransferFormProps
     );
   }
 
+
+
   const resetForm = () => {
     setFromAccount('');
     setToAccount('');
     setAmount('');
+    setShowTransactions(false);
+    setMessage(null);
   };
 
+  const handleOperationChange = (value: AccountOperation): void => {
+    setAccountOperation(value);
+    setShowTransactions(false);
+    setMessage(null);
+  };
+
+  const handleFromAccountChange = (value: string) => {
+    setFromAccount(value);
+    setShowTransactions(false);
+    setMessage(null);
+  };
   return (
     <section className="transfer-form">
       <h2>Account Operations</h2>
@@ -106,7 +125,8 @@ export function TransferForm({ accounts, onTransferComplete }: TransferFormProps
           <select
             id="accountOperation"
             value={accountOperation}
-            onChange={(e) => setAccountOperation(e.target.value as AccountOperation)}          >
+            onChange={(e) => handleOperationChange(e.target.value as AccountOperation)}
+          >
             <option value={AccountOperation.Transfer}>Transfer</option>
             <option value={AccountOperation.ReviewTransactions}>Recent Transactions</option>
           </select>
@@ -116,7 +136,7 @@ export function TransferForm({ accounts, onTransferComplete }: TransferFormProps
           <select
             id="fromAccount"
             value={fromAccount}
-            onChange={(e) => setFromAccount(e.target.value)}
+            onChange={(e) => handleFromAccountChange(e.target.value)}
             required
           >
             <option value="">-- Select an account --</option>
@@ -176,6 +196,10 @@ export function TransferForm({ accounts, onTransferComplete }: TransferFormProps
 
         {message && <p className={`form-message ${messageType}`}>{message}</p>}
       </form>
+      {/* show transactions grid only when "Recent Transactions" is selected and a fromAccount is chosen and View transactions is clicked */}
+      {accountOperation === AccountOperation.ReviewTransactions && fromAccount && showTransactions && (
+        <CustomerTransactions accountId={fromAccount} visible={showTransactions} />
+      )}
     </section>
 
   );
