@@ -141,8 +141,8 @@ export function TransferForm({ accounts, onTransferComplete }: TransferFormProps
           >
             <option value="">-- Select an account --</option>
             {accounts.map((account) => (
-              <option key={account.id} value={account.id}>
-                {account.id} ({account.accountType}) - {formatCurrency(account.balance)}
+              <option key={account.accountNumber} value={account.accountNumber}>
+                {account.accountNumber} ({account.accountType}) - {formatCurrency(account.balance)}
               </option>
             ))}
           </select>
