@@ -37,7 +37,7 @@ export function DepositWithdrawForm({ accounts, onTransferComplete }: TransferFo
       setLoading(false);
     }
   };
-
+ if (error) return <p className="error">{error}</p>;
   return (
    <section className="deposit-withdraw-form">
       <h2>Deposit / Withdraw</h2>
@@ -45,7 +45,7 @@ export function DepositWithdrawForm({ accounts, onTransferComplete }: TransferFo
         <div className="form-group">
           <label htmlFor="from-account">
             Account
-             </label>s
+             </label>
             <select
               id="from-account"
               value={fromAccount}

@@ -316,3 +316,37 @@ main {
   border-color: #0066cc;
   box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.15);
 }
+
+.user-name {
+  font-size: 0.9375rem;
+}
+
+.sign-out-button {
+  padding: 0.375rem 1rem;
+  background-color:   #002266;
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 4px;
+  font-size: 0.875rem;
+  transition: background-color 0.15s ease;
+}
+
+.sign-out-button:hover {
+  background-color:   #002266;
+}
+
+/* Sign-in screen */
+
+.sign-in-screen {
+  background-color: white;
+  padding: 3rem 2rem;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  text-align: center;
+}
+
+.sign-in-screen h2 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.5rem;
+  color: #2d3748;
+}
