@@ -33,7 +33,7 @@ export function CustomerTransactions({ accountId }: { accountId: string }) {
 
     return (
         <div className="account-list transactions">
-            <h2> <u>Transactions for the Account: {accountId || 'Unknown'}</u></h2>
+            <h2> <u>Recent Transactions for the Account: {accountId || 'Unknown'}</u></h2>
             {transactions.length === 0 ? (
                 <p>No transactions found</p>
             ) : (

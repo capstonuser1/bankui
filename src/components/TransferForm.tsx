@@ -108,7 +108,7 @@ export function TransferForm({ accounts, onTransferComplete }: TransferFormProps
             value={accountOperation}
             onChange={(e) => setAccountOperation(e.target.value as AccountOperation)}          >
             <option value={AccountOperation.Transfer}>Transfer</option>
-            <option value={AccountOperation.ReviewTransactions}>Review Transactions</option>
+            <option value={AccountOperation.ReviewTransactions}>Recent Transactions</option>
           </select>
         </div>
         <div className="form-row">
@@ -166,7 +166,7 @@ export function TransferForm({ accounts, onTransferComplete }: TransferFormProps
 
         <div className="button-group">
           <button type="submit" disabled={submitting}>
-            {submitting ? 'Submitting...' : accountOperation === AccountOperation.Transfer ? 'Transfer' : 'Review Transactions'}
+            {submitting ? 'Submitting...' : accountOperation === AccountOperation.Transfer ? 'Transfer' : 'View Transactions'}
           </button>
           {/* Todo: Add a reset button. on click it should reset the form fields . use the resetForm function */}
           <button type="button" onClick={resetForm} disabled={submitting}>
