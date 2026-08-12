@@ -22,7 +22,6 @@ import Home from './components/Home';
 import { CustomerTransactions } from './components/CustomerTransactions';
 
 import Ribbon from './components/Ribbon';
-import { ErrorBoundary } from './components/ErrorBoundary.tsx';
 export function App() {
   const { user, loading: authLoading } = useAuth();
 
@@ -35,7 +34,6 @@ export function App() {
   const [visible, setVisible] = useState<boolean>(false);
   const loadFlashMessage = useCallback(async () => {
     try {
-  
       const ribbonMsg = await getFlashMessage();
       setFlashMessage(ribbonMsg ? ribbonMsg : "default message" );
       setFlashType(ribbonMsg ? 'warning' : 'info');
@@ -88,7 +86,6 @@ export function App() {
   }, [flashMessage]);
 
   return (
-    <ErrorBoundary>
    <div className="App">
       <Header />
      {user && (
@@ -132,6 +129,6 @@ export function App() {
         </main>
       </BrowserRouter>
     </div>
-</ErrorBoundary>
+
   );
 }
