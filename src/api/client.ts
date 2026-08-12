@@ -35,10 +35,15 @@ export async function getAccounts(): Promise<Account[]> {
 
 export async function getCustomerTransactions(accountId: string): Promise<TransactionList[]> {
   const dummyTransactions: TransactionList[] = [
-    { transactionId: '1', accountId: 'acc1', type: 'DEPOSIT', amount: 1000, status: 'FAILED', date: '2023-01-01', desc: 'User deposited money.' },
-    { transactionId: '2', accountId: 'acc1', type: 'WITHDRAWAL', amount: -500, status: 'COMPLETE', date: '2023-01-02', desc: 'User withdrew money.' },
+    { transactionId: '1', accountId: 'A001', type: 'DEPOSIT', amount: 1000, status: 'FAILED', date: '2023-01-01', desc: 'User deposited money.' },
+    { transactionId: '2', accountId: 'A004', type: 'WITHDRAWAL', amount: -500, status: 'COMPLETE', date: '2023-01-02', desc: 'User withdrew money.' },
+    { transactionId: '1', accountId: 'A001', type: 'DEPOSIT', amount: 100, status: 'FAILED', date: '2023-01-01', desc: 'User deposited money.' },
+    { transactionId: '2', accountId: 'A004', type: 'WITHDRAWAL', amount: 300, status: 'COMPLETE', date: '2023-01-02', desc: 'User withdrew money.' },
+    { transactionId: '1', accountId: 'A001', type: 'DEPOSIT', amount: 9000, status: 'FAILED', date: '2023-01-01', desc: 'User deposited money.' },
+    { transactionId: '2', accountId: 'A004', type: 'WITHDRAWAL', amount: 1100, status: 'COMPLETE', date: '2023-01-02', desc: 'User withdrew money.' },
   ];
   const response = dummyTransactions;
+  return response.filter((transaction) => transaction.accountId === accountId);
   // const response = await fetch(`/api/accounts/${accountId}`, { headers: { Accept: 'application/json' } });
   // if (!response.ok) {
   // if (!response) {
