@@ -174,3 +174,13 @@ main {
   color: #c53030;
   border: 1px solid #feb2b2;
 }
+.header-user {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
