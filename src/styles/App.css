@@ -18,7 +18,7 @@ main {
 /* Header */
 
 .header {
-  background-color:  #002266;
+  background-color:   #002266;
   color: white;
   padding: 1rem 2rem;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -174,9 +174,13 @@ main {
   color: #c53030;
   border: 1px solid #feb2b2;
 }
-
-.button-group {
+.header-user {
   display: flex;
-  gap: 10px;
-  /* Adjust spacing as needed */
+  align-items: center;
+  gap: 1rem;
+}
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
