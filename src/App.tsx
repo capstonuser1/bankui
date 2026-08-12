@@ -11,7 +11,7 @@ import { Header } from './components/Header';
 import { AccountList } from './components/AccountList';
 import type { Account } from './api/types';
 import './styles/App.css';
-import { getAccounts } from './api/client';
+import { getAccounts,getFlashMessage } from './api/client';
 import { TransferForm } from './components/TransferForm';
 import { useAuth } from './auth/AuthContext';
 import { SignInScreen } from './components/SignInScreen';
@@ -21,31 +21,31 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import Home from './components/Home';
 import { CustomerTransactions } from './components/CustomerTransactions';
 
-//import Ribbon from './components/Ribbon';
+import Ribbon from './components/Ribbon';
 export function App() {
   const { user, loading: authLoading } = useAuth();
 
   const [accounts, setAccounts] = useState<Account[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  /*  const [ribbonMessage, setRibbonMessage] = useState<string | null>(null);
-   const [ribbonType, setRibbonType] = useState<string | null>(null);
-   const [ribbonError, setRibbonError] = useState<string | null>(null);
-   const [visible, setVisible] = useState<boolean>(false);
-   const loadRibbonMessage = useCallback(async () => {
-      try {
-        const ribbonMsg = await getRibbonMsg();
-        setRibbonMessage(ribbonMsg);
-        setRibbonType(ribbonMsg ? 'warning' : 'info');
-        setRibbonError(null);
-      } catch (e) {
-        const message = e instanceof Error ? e.message : 'Unknown error';
-        setRibbonError(message);
-        setRibbonMessage(null);
-        setRibbonType('error');
-        console.error('Ribbon message error:', message);
-      }
-    }, []); */
+  const [flashMessage, setFlashMessage] = useState<string | null>(null);
+  const [flashType, setFlashType] = useState<string | null>(null);
+  const [flashError, setFlashError] = useState<string | null>(null);
+  const [visible, setVisible] = useState<boolean>(false);
+  const loadFlashMessage = useCallback(async () => {
+    try {
+      const ribbonMsg = await getFlashMessage();
+      setFlashMessage(ribbonMsg ? ribbonMsg : "default message" );
+      setFlashType(ribbonMsg ? 'warning' : 'info');
+      setFlashError(null);
+    } catch (e) {
+      const message = e instanceof Error ? e.message : 'Unknown error';
+      setFlashError(message);
+      setFlashMessage(null);
+      setFlashType('error');
+      console.error('Flash message error:', message);
+    }
+  }, []);
   const loadAccounts = useCallback(async () => {
     setLoading(true);
     setError(null);
@@ -62,43 +62,41 @@ export function App() {
   useEffect(() => {
     if (user) {
       loadAccounts();
-      // loadRibbonMessage();
+      loadFlashMessage();
     } else {
-      /*  setRibbonMessage(null);
-        setRibbonType(null);
-        setRibbonError(null);
-        setVisible(false); */
+      setFlashMessage(null);
+      setFlashType(null);
+      setFlashError(null);
+      setVisible(false);
     }
-  }, [user, loadAccounts]);
-  /* 
-   }, [user, loadAccounts, loadRibbonMessage]);
+  }, [user, loadAccounts, loadFlashMessage]);
+
   useEffect(() => {
-     if (!ribbonMessage) {
-       setVisible(false);
-       return;
-     }
- 
-     setVisible(true);
-     const timer = window.setTimeout(() => {
-       setVisible(false);
-     }, 5000);
- 
-     return () => window.clearTimeout(timer);
-   }, [ribbonMessage]); 
-   after  header
-      {user && (
-         <Ribbon
-           visible={visible}
-           onClose={() => setVisible(false)}
-           message={ribbonMessage ?? ribbonError ?? 'No ribbon message available'}
-           type={ribbonType ?? 'info'}
-         />
-       )} 
-   */
+    if (!flashMessage) {
+      setVisible(false);
+      return;
+    }
+
+    setVisible(true);
+    const timer = window.setTimeout(() => {
+      setVisible(false);
+    }, 10000);
+
+    return () => window.clearTimeout(timer);
+  }, [flashMessage]);
+
   return (
    <div className="App">
       <Header />
-      <BrowserRouter>
+     {user && (
+       <Ribbon
+         visible={visible}
+         onClose={() => setVisible(false)}
+         message={flashMessage ?? flashError ?? 'No flash message available'}
+         type={flashType ?? 'info'}
+       />
+     )}
+     <BrowserRouter>
         <Menu />
         <main>
           {authLoading ? (
