@@ -94,3 +94,20 @@ async function safeReadErrorMessage(response: Response): Promise<string | null> 
     return null;
   }
 }
+export async function getFlashMessage(): Promise<string> {
+  const response = await fetch('/api/flashmessage', {
+    headers: { Accept: 'application/json' },
+  });
+  if (!response.ok) {
+    throw new Error(`Failed to load flash message: ${response.status}`);
+  }
+  //console.log("Ribbon message response:", await response.text());
+  const data = await response.text();
+  console.log("Ribbon message data:", data);
+  if (typeof data === 'string') {
+    return data;
+  }
+  else
+  { return data;}
+  //throw new Error('Invalid response format for flash message');
+}
