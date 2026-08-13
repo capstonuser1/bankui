@@ -8,7 +8,7 @@
  * function signatures.
  */
 
-import { Account, Customer, TransactionList, TransferRequest, TransferResponse, User } from './types';
+import { Account, AuditorData, Customer, TransactionList, TransferRequest, TransferResponse, User } from './types';
 
 export async function getCurrentUser(): Promise<User | null> {
   const response = await fetch('/api/me', { headers: { Accept: 'application/json' } });
@@ -24,14 +24,10 @@ export async function getCurrentUser(): Promise<User | null> {
 }
 
 export async function getAccounts(): Promise<Account[]> {
-  // Build the accounts URL based on the current user's role. Admin/auditor users
-  // should receive the full accounts list, regular users get accounts filtered
-  // by their subject.
   const user = await getCurrentUser();
   if (!user) {
     throw new Error('Not authenticated');
   }
-
   const roles = user.roles ?? [];
   const isPrivileged = roles.some((r) => /teller|auditor|/i.test(r));
 
@@ -59,6 +55,24 @@ export async function getCustomerTransactions(fromAccountNumber: string): Promis
     throw new Error(`Failed to load transactions: ${response.status}`);
   }
   return response.json();
+}
+
+export async function getAuditTransactions(): Promise<AuditorData[]> {
+
+  // return response.filter((transaction) => transaction.accountId === accountId);
+  //todo: generate dummy data for auditor transactions
+  const dummyTransactions: AuditorData[] = [
+    { transactionId: '1', customerName: 'Bob', accountNumber: '101-1010-11', transactionType: 'DEPOSIT', amount: 100, transactionStatus: 'COMPLETE', transactionDate: '2023-01-01', description: '', createdDate: new Date('2023-01-01') },
+    { transactionId: '1', customerName: 'Alice', accountNumber: '101-1010-12', transactionType: 'DEPOSIT', amount: 200, transactionStatus: 'COMPLETE', transactionDate: '2023-01-02', description: '', createdDate: new Date('2023-01-02') },
+  ]
+  const response = dummyTransactions;
+  // const url = `/api/accounts/auditTransactions`;
+  // const response = await fetch(url, { headers: { Accept: 'application/json' } });
+  // if (!response.ok) {
+  //   throw new Error(`Failed to load transactions: ${response.status}`);
+  // }
+  //return response.json();
+  return response;
 }
 
 export async function postTransfer(request: TransferRequest): Promise<TransferResponse> {

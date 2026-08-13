@@ -63,11 +63,11 @@ export function CustomerTransactions({
                                 <tr key={tx.accountNumber}>
                                     <td>{tx.transactionId}</td>
                                     <td>{tx.accountNumber}</td>
-                                    <td>{tx.transactionType}</td>
+                                    <td style={{ color: (tx.transactionType === 'TRANSFER_OUT' || tx.transactionType === 'WITHDRAWAL') ? 'red' : 'green', fontWeight: 'bold' }}>{tx.transactionType}</td>
                                     <td>{formatCurrency(tx.amount)}</td>
-                                    <td>{tx.transactionStatus}</td>
+                                    <td style={{ color: tx.transactionStatus === 'COMPLETED' ? 'green' : (tx.transactionStatus === 'FAILED' ? 'red' : 'green'), fontWeight: 'bold' }}>{tx.transactionStatus}</td>
                                     <td>{tx.transactionDate}</td>
-                                    <td>{tx.description}</td>
+                                    <td>{'Amount - ' + formatCurrency(tx.amount) + ' ' + tx.transactionType + ' from ' + tx.accountNumber}</td>
                                 </tr>
                             ))}
                         </tbody>

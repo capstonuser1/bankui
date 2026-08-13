@@ -26,7 +26,7 @@ export type User = {
   roles: string[];
 };
 
-export type TransactionStatus = 'COMPLETE' | 'FAILED';
+export type TransactionStatus = 'COMPLETED' | 'FAILED';
 export type TransactionType = 'TRANSFER' | 'DEPOSIT' | 'WITHDRAWAL' | 'TRANSFER_IN' | 'TRANSFER_OUT';
 
 export type Transaction = {
@@ -69,3 +69,14 @@ export type Customer = {
   createdDate: Date;
 };
 
+export type AuditorData = {
+  transactionId: string;
+  accountNumber: string;
+  customerName: string;
+  transactionType: TransactionType;
+  amount: number;
+  transactionStatus: TransactionStatus;
+  transactionDate: string;
+  description: string;
+  createdDate: Date;
+};
