@@ -9,9 +9,9 @@ import { useState, useCallback, useEffect } from 'react';
 
 import { Header } from './components/Header';
 import { AccountList } from './components/AccountList';
-import type { Account } from './api/types';
+import type { Account, AuditorData } from './api/types';
 import './styles/App.css';
-import { getAccounts,getFlashMessage } from './api/client';
+import { getAccounts, getFlashMessage } from './api/client';
 import { TransferForm } from './components/TransferForm';
 import { useAuth } from './auth/AuthContext';
 import { SignInScreen } from './components/SignInScreen';
@@ -22,6 +22,7 @@ import Home from './components/Home';
 import { CustomerTransactions } from './components/CustomerTransactions';
 
 import Ribbon from './components/Ribbon';
+import Auditor from './components/Auditor';
 export function App() {
   const { user, loading: authLoading } = useAuth();
 
@@ -32,10 +33,11 @@ export function App() {
   const [flashType, setFlashType] = useState<string | null>(null);
   const [flashError, setFlashError] = useState<string | null>(null);
   const [visible, setVisible] = useState<boolean>(false);
+  const [auditorData, setAuditorData] = useState<AuditorData[]>([]);
   const loadFlashMessage = useCallback(async () => {
     try {
       const flashMsg = await getFlashMessage();
-      setFlashMessage(flashMsg ? flashMsg : "default message" );
+      setFlashMessage(flashMsg ? flashMsg : "In observance of Independence Day, our bank will be closed on [Aug 15th 2026].We will reopen on [16th Aug 2026] during regular business hours.Happy Independence Day!");
       setFlashType(flashMsg ? 'warning' : 'info');
       setFlashError(null);
     } catch (e) {
@@ -86,17 +88,17 @@ export function App() {
   }, [flashMessage]);
 
   return (
-   <div className="App">
+    <div className="App">
       <Header />
-     {user && (
-       <Ribbon
-         visible={visible}
-         onClose={() => setVisible(false)}
-         message={flashMessage ?? flashError ?? 'No flash message available'}
-         type={flashType ?? 'info'}
-       />
-     )}
-     <BrowserRouter>
+      {user && (
+        <Ribbon
+          visible={visible}
+          onClose={() => setVisible(false)}
+          message={flashMessage ?? flashError ?? 'No flash message available'}
+          type={flashType ?? 'info'}
+        />
+      )}
+      <BrowserRouter>
         <Menu />
         <main>
           {authLoading ? (
@@ -114,12 +116,17 @@ export function App() {
                 element={<TransferForm accounts={accounts} onTransferComplete={loadAccounts} />}
               />
               <Route
+                path="/audits"
+                element={<Auditor auditorData={auditorData} loading={loading} error={error} />}
+              />
+              <Route
                 path="/"
                 element={
                   <>
                     <AccountList accounts={accounts} loading={loading} error={error} />
-                    <TransferForm accounts={accounts} onTransferComplete={loadAccounts} />
-                     <CustomerTransactions accountId={accounts.length > 0 ? accounts[0].id : ''} />
+
+                    {/* <TransferForm accounts={accounts} onTransferComplete={loadAccounts} />
+                    <CustomerTransactions accountId={accounts.length > 0 ? accounts[0].id : ''} /> */}
                   </>
                 }
               />
