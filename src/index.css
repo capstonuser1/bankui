@@ -4,6 +4,9 @@
   box-sizing: border-box;
 }
 
+/* Import a professional UI font */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap');
+
 :root {
   /* Color palette */
   --color-bg: #f4f6fb;
@@ -18,7 +21,7 @@
   --color-shadow: rgba(10, 25, 47, 0.08);
 
   /* Typography */
-  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", monospace;
 
   /* Radii / spacing */

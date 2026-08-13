@@ -7,7 +7,8 @@ type UserLike = { roles?: unknown; role?: unknown };
 const menuConfig = [
   { to: "/", label: "Account Information", roles: ["teller", "account_holder"] }, // public / all authenticated users v"teller", "admin", "account_holder"
   { to: "/deposits", label: "Deposits and WithDrawals", roles: ["teller"] },
-  { to: "/transactions", label: "Transactions", roles: ["account_holder"] },
+  { to: "/transactions", label: "Transfer", roles: ["account_holder"] },
+  { to: "/recent-transactions", label: "Recent Transactions", roles: ["account_holder"] },
   { to: "/audits", label: "Auditor", roles: ["teller"] }
 ];
 
@@ -27,7 +28,7 @@ const Menu = () => {
     }
     return [];
   })();
-  console.log("Test Roles" + userRoles);
+
   const hasAccess = (roles: string[]) =>
     roles.length === 0 || roles.some((r) => userRoles.includes(r));
 

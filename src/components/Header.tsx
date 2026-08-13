@@ -9,7 +9,12 @@
 
 import { useAuth } from '../auth/AuthContext';
 
-export function Header() {
+type HeaderProps = {
+  onToggleSidebar?: () => void;
+  sidebarOpen?: boolean;
+};
+
+export function Header({ onToggleSidebar, sidebarOpen = true }: HeaderProps) {
   const { user } = useAuth();
 
   async function handleLogout() {
@@ -19,9 +24,22 @@ export function Header() {
   return (
     <header className="header">
       <div className="header-content">
-        <div>
-          <h1>MD282 Bank</h1>
-          <p className="tagline">Online Banking</p>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <button
+            aria-pressed={!sidebarOpen}
+            aria-label="Toggle sidebar"
+            className="sidebar-toggle btn ghost"
+            onClick={onToggleSidebar}
+          >
+            ☰
+          </button>
+          <div className="brand">
+            <img src="/logo-bank.png" alt="Bank logo" className="bank-logo" />
+            <div>
+              <h1>MD282 Bank</h1>
+              <p className="tagline">Online Banking</p>
+            </div>
+          </div>
         </div>
         {user && (
           <div className="header-user">

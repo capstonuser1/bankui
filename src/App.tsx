@@ -8,23 +8,27 @@
 import { useState, useCallback, useEffect } from 'react';
 
 import { Header } from './components/Header';
+import Marquee from './components/Marquee';
 import { AccountList } from './components/AccountList';
 import type { Account } from './api/types';
 import './styles/App.css';
 import { getAccounts,getFlashMessage } from './api/client';
 import { TransferForm } from './components/TransferForm';
+// import { CustomerTransactions } from './components/CustomerTransactions';
+import RecentTransactionsPage from './components/RecentTransactionsPage';
+import RightRail from './components/RightRail';
 import { useAuth } from './auth/AuthContext';
 import { SignInScreen } from './components/SignInScreen';
 import { DepositWithdrawForm } from './components/DepositWithdrawForm';
 import Menu from './components/Menu';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
-import Home from './components/Home';
-import { CustomerTransactions } from './components/CustomerTransactions';
+// Note: removed unused imports to avoid TypeScript compile errors
 
 import Ribbon from './components/Ribbon';
 import Footer from './components/Footer';
 export function App() {
   const { user, loading: authLoading } = useAuth();
+  const [sidebarOpen, setSidebarOpen] = useState(true);
 
   const [accounts, setAccounts] = useState<Account[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -88,7 +92,8 @@ export function App() {
 
   return (
   <div className="app">
-      <Header />
+      <Header onToggleSidebar={() => setSidebarOpen((s) => !s)} sidebarOpen={sidebarOpen} />
+      <Marquee />
      {user && (
        <Ribbon
          visible={visible}
@@ -97,9 +102,9 @@ export function App() {
          type={flashType ?? 'info'}
        />
      )}
-     <BrowserRouter>
-      <div className="app-layout container">
-        <aside className="sidebar">
+    <BrowserRouter>
+      <div className={`app-layout ${sidebarOpen ? '' : 'sidebar-closed'}`}>
+        <aside className={`sidebar ${sidebarOpen ? '' : 'collapsed'}`}>
           <Menu />
         </aside>
         <main>
@@ -117,6 +122,7 @@ export function App() {
                 path="/transactions"
                 element={<TransferForm accounts={accounts} onTransferComplete={loadAccounts} />}
               />
+              <Route path="/recent-transactions" element={<RecentTransactionsPage />} />
               <Route
                 path="/"
                 element={
@@ -131,6 +137,9 @@ export function App() {
             </Routes>
           )}
         </main>
+        <aside className="right-rail-wrap">
+          <RightRail />
+        </aside>
       </div>
          </BrowserRouter>
          <Footer />

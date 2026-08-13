@@ -27,12 +27,12 @@ export type User = {
 };
 
 export type TransactionStatus = 'COMPLETE' | 'FAILED';
-export type TransactionType = 'TRANSFER' | 'DEPOSIT' | 'WITHDRAWAL';
+export type TransactionType = 'TRANSFER' | 'DEPOSIT' | 'WITHDRAWAL' | 'TRANSFER_IN' | 'TRANSFER_OUT';
 
 export type Transaction = {
   transactionId: string;
   date: string;
-  type: TransactionType;
+  transactionType: TransactionType;
   amount: number;
   account1: string;
   account2: string | null;
@@ -41,12 +41,12 @@ export type Transaction = {
 
 export type TransactionList = {
   transactionId: string;
-  accountId: string;
-  type: TransactionType;
+  accountNumber: string;
+  transactionType: TransactionType;
   amount: number;
-  status: TransactionStatus;
-  date: string;
-  desc: string;
+  transactionStatus: TransactionStatus;
+  transactionDate: string;
+  description: string;
 };
 
 export type TransferRequest = {
@@ -59,3 +59,12 @@ export type TransferResponse = {
   transactionId: string;
   status: TransactionStatus;
 };
+
+export type Customer = {
+  customerId: number;
+  customerNumber: string;
+  fullName: string;
+  email: string;
+  createdDate: Date;
+};
+
