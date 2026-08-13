@@ -12,7 +12,7 @@ import { Account, Customer, TransactionList, TransferRequest, TransferResponse, 
 
 export async function getCurrentUser(): Promise<User | null> {
   const response = await fetch('/api/me', { headers: { Accept: 'application/json' } });
- 
+
   if (!response.ok) {
     throw new Error(`Failed to load current user: ${response.status}`);
   }
@@ -24,7 +24,22 @@ export async function getCurrentUser(): Promise<User | null> {
 }
 
 export async function getAccounts(): Promise<Account[]> {
-  const response = await fetch('/api/accountsbysubject', { headers: { Accept: 'application/json' } });
+  // Build the accounts URL based on the current user's role. Admin/auditor users
+  // should receive the full accounts list, regular users get accounts filtered
+  // by their subject.
+  const user = await getCurrentUser();
+  if (!user) {
+    throw new Error('Not authenticated');
+  }
+
+  const roles = user.roles ?? [];
+  const isPrivileged = roles.some((r) => /teller|auditor|/i.test(r));
+
+  const url = isPrivileged
+    ? '/api/accounts'
+    : `/api/accountsbysubject?subject=${encodeURIComponent(user.subject)}`;
+
+  const response = await fetch(url, { headers: { Accept: 'application/json' } });
   if (!response.ok) {
     throw new Error(`Failed to load accounts: ${response.status}`);
   }
@@ -117,13 +132,13 @@ export async function postTransaction(request: TransferRequest): Promise<Transfe
   return response.json();
 }
 
- 
+
 export async function getCustomers(): Promise<Customer[]> {
   const response = await fetch('/api/customers', {
     method: 'GET',
     headers: {
       Accept: 'application/json'
-      
+
     },
   });
   if (!response.ok) {
@@ -137,7 +152,7 @@ export async function getAccountsbyCustomerId(customerNumber: string): Promise<A
     method: 'GET',
     headers: {
       Accept: 'application/json'
-      
+
     },
   });
   if (!response.ok) {
