@@ -45,7 +45,7 @@ export default function Auditor({ auditorData: _auditorData, loading: _parentLoa
 
     return (
         <section className="auditor account-list">
-            <h1>Auditor:</h1>
+            <h2>Auditor</h2>
             <h2>Total Accounts: <b>{auditData.length}</b></h2>
             <h2>Total Balance: <b style={{ color: 'green' }}>{formatCurrency(auditData.reduce((sum, data) => sum + data.amount, 0))}</b></h2>
             <table>
@@ -69,7 +69,7 @@ export default function Auditor({ auditorData: _auditorData, loading: _parentLoa
                             <td>{data.accountNumber}</td>
                             <td style={{ color: data.transactionType === 'DEPOSIT' ? 'green' : 'red', fontWeight: 'bold' }}>{data.transactionType}</td>
                             <td>{formatCurrency(data.amount)}</td>
-                            <td style={{ color: (data.transactionStatus === 'COMPLETED' || data.transactionStatus === 'COMPLETE') ? (data.transactionStatus === 'COMPLETED' ? 'green' : 'red') : 'gray', fontWeight: 'bold' }}>{data.transactionStatus}</td>
+                            <td style={{ color: (data.transactionStatus === 'COMPLETED') ? (data.transactionStatus === 'COMPLETED' ? 'green' : 'red') : 'gray', fontWeight: 'bold' }}>{data.transactionStatus}</td>
                             <td>{data.transactionDate}</td>
                             <td>{'Amount - ' + formatCurrency(data.amount) + ' ' + data.transactionType + ' from ' + data.accountNumber}</td>
                         </tr>

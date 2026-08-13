@@ -10,7 +10,7 @@ import { useState, useCallback, useEffect } from 'react';
 import { Header } from './components/Header';
 import Marquee from './components/Marquee';
 import { AccountList } from './components/AccountList';
-import type { Account } from './api/types';
+import type { Account, AuditorData  } from './api/types';
 import './styles/App.css';
 import { getAccounts,getFlashMessage } from './api/client';
 import { TransferForm } from './components/TransferForm';
@@ -27,6 +27,7 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 
 import Ribbon from './components/Ribbon';
 import Footer from './components/Footer';
+import Auditor from './components/Auditor';
 export function App() {
   const { user, loading: authLoading } = useAuth();
   const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -38,6 +39,7 @@ export function App() {
   const [flashType, setFlashType] = useState<string | null>(null);
   const [flashError, setFlashError] = useState<string | null>(null);
   const [visible, setVisible] = useState<boolean>(false);
+  const [auditorData, setAuditorData] = useState<AuditorData[]>([]);
   const loadFlashMessage = useCallback(async () => {
     try {
       const flashMsg = await getFlashMessage();
@@ -122,6 +124,10 @@ export function App() {
               <Route
                 path="/transactions"
                 element={<TransferForm accounts={accounts} onTransferComplete={loadAccounts} />}
+              />
+              <Route
+                path="/audits"
+                element={<Auditor auditorData={auditorData} loading={loading} error={error} />}
               />
               <Route path="/recent-transactions" element={<RecentTransactionsPage />} />
               <Route path="/payments" element={<PaymentUtility onPaymentComplete={loadAccounts} />} />

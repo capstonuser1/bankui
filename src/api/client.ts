@@ -35,7 +35,7 @@ export async function getAccounts(): Promise<Account[]> {
     ? '/api/accounts'
     : `/api/accountsbysubject?subject=${encodeURIComponent(user.subject)}`;
   
-    window.alert(user.subject); // Debugging line
+  // Debugging line
 
   const response = await fetch(url, { headers: { Accept: 'application/json' } });
   if (!response.ok) {

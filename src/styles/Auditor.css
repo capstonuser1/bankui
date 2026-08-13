@@ -5,8 +5,8 @@
     box-shadow: 0 6px 18px rgba(24, 39, 75, 0.06);
     color: #0f172a;
     min-height: 500px;
-    width: 100vw;
-    margin-left: calc(-50vw + 50%);
+    width: 100%;
+    margin-left: 0;
     padding: 24px 2rem;
 }
 
@@ -27,6 +27,14 @@
 .auditor h1 {
     margin: 0 0 8px 0;
     font-size: 1.25rem;
+}
+
+/* Ensure h2 headings inside auditor use the app's form heading style */
+.auditor h2 {
+    margin: 0 0 0.75rem 0;
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: #08102a;
 }
 
 .auditor p {

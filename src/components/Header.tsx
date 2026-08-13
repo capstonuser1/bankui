@@ -33,8 +33,7 @@ export function Header({ onToggleSidebar, sidebarOpen = true }: HeaderProps) {
           >
             ☰
           </button>
-          <div className="brand">
-            <img src="/logo-bank.png" alt="Bank logo" className="bank-logo" />
+          <div className="brand">            
             <div>
               <h1>MD282 Bank</h1>
               <p className="tagline">Online Banking</p>
