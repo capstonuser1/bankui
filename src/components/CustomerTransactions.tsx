@@ -50,7 +50,7 @@ export function CustomerTransactions({
                         <thead>
                             <tr>
                                 <th>Transaction ID</th>
-                                <th>Account Id</th>
+                                <th>Account Number</th>
                                 <th>Type</th>
                                 <th>Amount</th>
                                 <th>Status</th>
@@ -60,18 +60,14 @@ export function CustomerTransactions({
                         </thead>
                         <tbody>
                             {transactions.map((tx) => (
-                                <tr key={tx.transactionId}>
+                                <tr key={tx.accountNumber}>
                                     <td>{tx.transactionId}</td>
-                                    <td>{tx.accountId}</td>
-                                    <td>{tx.type}</td>
+                                    <td>{tx.accountNumber}</td>
+                                    <td>{tx.transactionType}</td>
                                     <td>{formatCurrency(tx.amount)}</td>
-                                    <td>
-                                        <span className={`status status--${(tx.status || '').toLowerCase()}`}>
-                                            {tx.status}
-                                        </span>
-                                    </td>
+                                    <td>{tx.status}</td>
                                     <td>{tx.date}</td>
-                                    <td>{tx.desc}</td>
+                                    <td>{tx.description}</td>
                                 </tr>
                             ))}
                         </tbody>

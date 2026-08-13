@@ -8,7 +8,7 @@
  */
 
 import { useState } from 'react';
-import { postTransfer } from '../api/client';
+import { getCustomerTransactions, postTransfer } from '../api/client';
 import type { Account } from '../api/types';
 import { formatCurrency } from '../utils/format';
 import { AccountOperation } from '../enums/Transfer';
@@ -41,42 +41,57 @@ export function TransferForm({ accounts, onTransferComplete }: TransferFormProps
     setMessageType(null);
 
     if (accountOperation === AccountOperation.ReviewTransactions) {
-      if (!fromAccount) {
-        setMessage('Please select a source account first.');
-        setMessageType('error');
-        setSubmitting(false);
-        return;
-      }
+      // if (!fromAccount) {
+      //   setMessage('Please select a source account first.');
+      //   setMessageType('error');
+      //   setSubmitting(false);
+      //   return;
+      // }
 
-      setShowTransactions(true);
-      setMessage(`Showing recent transactions for ${fromAccount}`);
-      setMessageType('success');
-      setSubmitting(false);
-      return;
+      // setShowTransactions(true);
+      // setMessage(`Showing recent transactions for ${fromAccount}`);
+      // setMessageType('success');
+      // setSubmitting(false);
+      // //todo: call getCustomerTransactions
+      // const result_customer = await getCustomerTransactions(fromAccount);
+      // console.log('Customer Transactions:', result_customer);
     }
-    // const handleOperationChange = (value: AccountOperation) => {
-    //   setAccountOperation(value);
-    //   if (value !== AccountOperation.ReviewTransactions) {
-    //     setShowTransactions(false);
-    //   }
-    // };
-    try {
-      const result = await postTransfer({
-        fromAccountNumber: fromAccount,
-        toAccountNumber: toAccount,
-        amount: parseFloat(amount),
-      });
 
-      if (result.status === 'COMPLETE') {
-        setMessage(`Transfer complete. Transaction ID: ${result.transactionId}`);
+    try {
+      if (accountOperation === AccountOperation.Transfer) {
+        const result = await postTransfer({
+          fromAccountNumber: fromAccount,
+          toAccountNumber: toAccount,
+          amount: parseFloat(amount),
+        });
+
+        if (result.status === 'COMPLETE') {
+          setMessage(`Transfer complete. Transaction ID: ${result.transactionId}`);
+          setMessageType('success');
+          setFromAccount('');
+          setToAccount('');
+          setAmount('');
+          onTransferComplete();
+        } else {
+          setMessage('Transfer failed. Please try again.');
+          setMessageType('error');
+        }
+      }
+      else if (accountOperation === AccountOperation.ReviewTransactions) {
+        if (!fromAccount) {
+          setMessage('Please select a source account first.');
+          setMessageType('error');
+          setSubmitting(false);
+          return;
+        }
+
+        setShowTransactions(true);
+        setMessage(`Showing recent transactions for ${fromAccount}`);
         setMessageType('success');
-        setFromAccount('');
-        setToAccount('');
-        setAmount('');
-        onTransferComplete();
-      } else {
-        setMessage('Transfer failed. Please try again.');
-        setMessageType('error');
+        setSubmitting(false);
+        //todo: call getCustomerTransactions
+        const result_customer = await getCustomerTransactions(fromAccount);
+        console.log('Customer Transactions:', result_customer);
       }
     } catch (e) {
       setMessage(e instanceof Error ? e.message : 'Unknown error occurred');

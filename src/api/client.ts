@@ -24,7 +24,7 @@ export async function getCurrentUser(): Promise<User | null> {
 }
 
 export async function getAccounts(): Promise<Account[]> {
-  const response = await fetch('/api/accounts', { headers: { Accept: 'application/json' } });
+  const response = await fetch('/api/accountsbysubject', { headers: { Accept: 'application/json' } });
   if (!response.ok) {
     throw new Error(`Failed to load accounts: ${response.status}`);
   }
@@ -33,26 +33,16 @@ export async function getAccounts(): Promise<Account[]> {
 
 /**TODO: Implement the actual API call to fetch customer transactions based on the account ID */
 
-export async function getCustomerTransactions(accountId: string): Promise<TransactionList[]> {
-  const dummyTransactions: TransactionList[] = [
-    { transactionId: '1', accountId: 'A001', type: 'DEPOSIT', amount: 1000, status: 'FAILED', date: '2023-01-01', desc: 'User deposited money.' },
-    { transactionId: '2', accountId: 'A004', type: 'WITHDRAWAL', amount: -500, status: 'COMPLETE', date: '2023-01-02', desc: 'User withdrew money.' },
-    { transactionId: '1', accountId: 'A001', type: 'DEPOSIT', amount: 100, status: 'FAILED', date: '2023-01-01', desc: 'User deposited money.' },
-    { transactionId: '2', accountId: 'A004', type: 'WITHDRAWAL', amount: 300, status: 'COMPLETE', date: '2023-01-02', desc: 'User withdrew money.' },
-    { transactionId: '1', accountId: 'A001', type: 'DEPOSIT', amount: 9000, status: 'FAILED', date: '2023-01-01', desc: 'User deposited money.' },
-    { transactionId: '2', accountId: 'A004', type: 'WITHDRAWAL', amount: 1100, status: 'COMPLETE', date: '2023-01-02', desc: 'User withdrew money.' },
-  ];
-  const response = dummyTransactions;
-  return response.filter((transaction) => transaction.accountId === accountId);
-  // const response = await fetch(`/api/accounts/${accountId}`, { headers: { Accept: 'application/json' } });
-  // if (!response.ok) {
-  // if (!response) {
-  //   throw new Error(`Failed to load transactions: ${response.status}`);
-  // }
-  // //return response.json();
-  return response;
-}
+export async function getCustomerTransactions(fromAccountNumber: string): Promise<TransactionList[]> {
 
+  // return response.filter((transaction) => transaction.accountId === accountId);
+  const url = `/api/accounts/${fromAccountNumber}/transactions`;
+  const response = await fetch(url, { headers: { Accept: 'application/json' } });
+  if (!response.ok) {
+    throw new Error(`Failed to load transactions: ${response.status}`);
+  }
+  return response.json();
+}
 
 export async function postTransfer(request: TransferRequest): Promise<TransferResponse> {
   const response = await fetch('/api/transfers', {
@@ -107,7 +97,6 @@ export async function getFlashMessage(): Promise<string> {
   if (typeof data === 'string') {
     return data;
   }
-  else
-  { return data;}
+  else { return data; }
   //throw new Error('Invalid response format for flash message');
 }
