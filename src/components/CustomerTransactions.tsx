@@ -65,8 +65,8 @@ export function CustomerTransactions({
                                     <td>{tx.accountNumber}</td>
                                     <td>{tx.transactionType}</td>
                                     <td>{formatCurrency(tx.amount)}</td>
-                                    <td>{tx.status}</td>
-                                    <td>{tx.date}</td>
+                                    <td>{tx.transactionStatus}</td>
+                                    <td>{tx.transactionDate}</td>
                                     <td>{tx.description}</td>
                                 </tr>
                             ))}

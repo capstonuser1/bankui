@@ -44,8 +44,8 @@ export type TransactionList = {
   accountNumber: string;
   transactionType: TransactionType;
   amount: number;
-  status: TransactionStatus;
-  date: string;
+  transactionStatus: TransactionStatus;
+  transactionDate: string;
   description: string;
 };
 
@@ -60,7 +60,7 @@ export type TransferResponse = {
   status: TransactionStatus;
 };
 
-export type  Customer = {
+export type Customer = {
   customerId: number;
   customerNumber: string;
   fullName: string;

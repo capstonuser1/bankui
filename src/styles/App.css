@@ -18,7 +18,7 @@ main {
 /* Header */
 
 .header {
-  background-color:   #002266;
+  background-color: #002266;
   color: white;
   padding: 1rem 2rem;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -117,7 +117,7 @@ main {
 .transfer-form input:focus,
 .transfer-form select:focus {
   outline: none;
-  border-color:  #002266;
+  border-color: #002266;
   box-shadow: 0 0 0 3px rgba(31, 111, 235, 0.15);
 }
 
@@ -133,11 +133,18 @@ main {
 }
 
 .transfer-form button:hover:not(:disabled) {
-  background-color:  #002266;
+  background-color: #002266;
 }
 
 .transfer-form button:disabled {
   background-color: #a0aec0;
+}
+
+/* Button group spacing for transfer form */
+.transfer-form .button-group {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
 }
 
 /* Status messages */
@@ -174,11 +181,13 @@ main {
   color: #c53030;
   border: 1px solid #feb2b2;
 }
+
 .header-user {
   display: flex;
   align-items: center;
   gap: 1rem;
 }
+
 .header-content {
   display: flex;
   justify-content: space-between;
@@ -190,7 +199,7 @@ main {
   width: 100%;
   margin: 20px auto;
   padding: 24px;
-   overflow-x: auto;
+  overflow-x: auto;
   background-color: #f9f9f9;
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -252,7 +261,7 @@ main {
   font-size: 14px;
   font-weight: 600;
   padding: 14px 16px;
-  background-color:  #002266;
+  background-color: #002266;
   color: white;
   border: none;
   border-radius: 6px;
@@ -264,7 +273,7 @@ main {
 }
 
 .deposit-withdraw-form button:hover:not(:disabled) {
-  background-color:  #002266;
+  background-color: #002266;
 }
 
 .deposit-withdraw-form button:disabled {
@@ -292,6 +301,7 @@ main {
   border-radius: 4px;
   border-left: 4px solid #388e3c;
 }
+
 /* From Account Select Styling */
 #from-account {
   font-size: 14px;
@@ -323,7 +333,7 @@ main {
 
 .sign-out-button {
   padding: 0.375rem 1rem;
-  background-color:   #002266;
+  background-color: #002266;
   color: white;
   border: 1px solid rgba(255, 255, 255, 0.4);
   border-radius: 4px;
@@ -332,7 +342,7 @@ main {
 }
 
 .sign-out-button:hover {
-  background-color:   #002266;
+  background-color: #002266;
 }
 
 /* Sign-in screen */
