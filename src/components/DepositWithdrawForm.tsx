@@ -93,9 +93,11 @@ export function DepositWithdrawForm({ accounts, onTransferComplete }: TransferFo
          
         </div>
 
-        <button type="submit" disabled={loading}>
-          {loading ? 'Processing...' : action === 'deposit' ? 'Deposit' : 'Withdraw'}
-        </button>
+        <div className="button-group">
+          <button type="submit" className="btn btn-large" disabled={loading}>
+            {loading ? 'Processing...' : action === 'deposit' ? 'Deposit' : 'Withdraw'}
+          </button>
+        </div>
 
         {error && <p className="error">{error}</p>}
         {success && <p className="success">{success}</p>}

@@ -27,26 +27,28 @@ export function AccountList({ accounts, loading, error }: AccountListProps) {
   return (
     <section className="account-list">
       <h2>Your Accounts</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Account Number</th>
-            <th>Type</th>
-            <th>Status</th>
-            <th>Balance</th>
-          </tr>
-        </thead>
-        <tbody>
-          {accounts.map((account) => (
-            <tr key={account.accountNumber}>
-              <td>{account.accountNumber}</td>
-              <td>{account.accountType}</td>
-              <td>{account.accountStatus}</td>
-              <td>{formatCurrency(account.balance)}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <div className="account-grid">
+        {accounts.map((account) => {
+          const inactive = String(account.accountStatus).toLowerCase().includes('inactive');
+          return (
+            <article className="account-card card" key={account.accountNumber}>
+              <div className="account-card-header">
+                <div className="account-number">{account.accountNumber}</div>
+                <div className={`account-status ${inactive ? 'inactive' : 'active'}`}>
+                  {account.accountStatus}
+                </div>
+              </div>
+              <div className="account-card-body">
+                <div className="account-type text-muted">{account.accountType}</div>
+                <div className="balance">
+                  <div className="balance-label text-muted">Balance</div>
+                  <div className="amount">{formatCurrency(account.balance)}</div>
+                </div>
+              </div>
+            </article>
+          );
+        })}
+      </div>
     </section>
   );
 }

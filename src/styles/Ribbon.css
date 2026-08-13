@@ -1,35 +1,9 @@
-.floating-ribbon {
-   
-position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    padding: 12px;
-    text-align: center;
-    font-size: 14px;
-    font-weight: 600;
-    color: white;
+.floating-ribbon { position: fixed; top: 12px; left: 50%; transform: translateX(-50%); z-index: 9999; }
 
-    z-index: 9999;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-}
-.close-btn {
-    float: right;
-    background: transparent;
-    border: none;
-    color:white;
-    cursor: pointer;
-    font-size: 16px;
-}
-.success {
-    background-color:#2e7d32;
-}
-.warning {
-    background-color: #ed6c02
-}
-.info {
-    background-color: #1976d2;
-}
-.error {
-    background-color: #d32f2f;
-}
+/* status helpers (colors are set in App.css via .floating-ribbon base) */
+.floating-ribbon.success { background: linear-gradient(90deg, rgba(16,185,129,0.08), rgba(6,78,59,0.03)); color: #064e3b; }
+.floating-ribbon.warning { background: linear-gradient(90deg, rgba(253,186,116,0.08), rgba(237,108,2,0.03)); color: #663c00; }
+.floating-ribbon.info { background: linear-gradient(90deg, rgba(31,111,235,0.08), rgba(5,42,109,0.03)); color: #072a6d; }
+.floating-ribbon.error { background: linear-gradient(90deg, rgba(220,38,38,0.08), rgba(139,0,0,0.03)); color: #7f1d1d; }
+
+.close-btn { margin-left: 0.5rem; }

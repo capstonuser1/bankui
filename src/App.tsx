@@ -22,6 +22,7 @@ import Home from './components/Home';
 import { CustomerTransactions } from './components/CustomerTransactions';
 
 import Ribbon from './components/Ribbon';
+import Footer from './components/Footer';
 export function App() {
   const { user, loading: authLoading } = useAuth();
 
@@ -86,7 +87,7 @@ export function App() {
   }, [flashMessage]);
 
   return (
-   <div className="App">
+  <div className="app">
       <Header />
      {user && (
        <Ribbon
@@ -97,7 +98,10 @@ export function App() {
        />
      )}
      <BrowserRouter>
-        <Menu />
+      <div className="app-layout container">
+        <aside className="sidebar">
+          <Menu />
+        </aside>
         <main>
           {authLoading ? (
             <p className="status-message">Loading user info...</p>
@@ -118,8 +122,8 @@ export function App() {
                 element={
                   <>
                     <AccountList accounts={accounts} loading={loading} error={error} />
-                    <TransferForm accounts={accounts} onTransferComplete={loadAccounts} />
-                     <CustomerTransactions accountId={accounts.length > 0 ? accounts[0].id : ''} />
+                    {/* <TransferForm accounts={accounts} onTransferComplete={loadAccounts} />
+                     <CustomerTransactions accountId={accounts.length > 0 ? accounts[0].id : ''} /> */}
                   </>
                 }
               />
@@ -127,7 +131,9 @@ export function App() {
             </Routes>
           )}
         </main>
-      </BrowserRouter>
+      </div>
+         </BrowserRouter>
+         <Footer />
     </div>
 
   );

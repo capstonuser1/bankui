@@ -24,9 +24,9 @@ export function Header() {
           <p className="tagline">Online Banking</p>
         </div>
         {user && (
-          <div className="user-name">
+          <div className="header-user">
             <span className="user-name">Welcome, {user.preferredUsername}</span>
-            <button type="button" className="sign-out-button" onClick={handleLogout}>
+            <button type="button" className="sign-out-button btn ghost" onClick={handleLogout}>
               Sign Out
             </button>
           </div>

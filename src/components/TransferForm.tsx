@@ -185,11 +185,11 @@ export function TransferForm({ accounts, onTransferComplete }: TransferFormProps
         </div>
 
         <div className="button-group">
-          <button type="submit" disabled={submitting}>
+          <button type="submit" className="btn btn-large" disabled={submitting}>
             {submitting ? 'Submitting...' : accountOperation === AccountOperation.Transfer ? 'Transfer' : 'View Transactions'}
           </button>
           {/* Todo: Add a reset button. on click it should reset the form fields . use the resetForm function */}
-          <button type="button" onClick={resetForm} disabled={submitting}>
+          <button type="button" className="btn secondary" onClick={resetForm} disabled={submitting}>
             Reset
           </button>
         </div>
