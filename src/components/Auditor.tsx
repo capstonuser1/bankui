@@ -69,7 +69,7 @@ export default function Auditor({ auditorData: _auditorData, loading: _parentLoa
                             <td>{data.accountNumber}</td>
                             <td style={{ color: data.transactionType === 'DEPOSIT' ? 'green' : 'red', fontWeight: 'bold' }}>{data.transactionType}</td>
                             <td>{formatCurrency(data.amount)}</td>
-                            <td style={{ color: data.transactionStatus === 'COMPLETE' ? 'green' : 'red', fontWeight: 'bold' }}>{data.transactionStatus}</td>
+                            <td style={{ color: (data.transactionStatus === 'COMPLETED' || data.transactionStatus === 'COMPLETE') ? (data.transactionStatus === 'COMPLETED' ? 'green' : 'red') : 'gray', fontWeight: 'bold' }}>{data.transactionStatus}</td>
                             <td>{data.transactionDate}</td>
                             <td>{'Amount - ' + formatCurrency(data.amount) + ' ' + data.transactionType + ' from ' + data.accountNumber}</td>
                         </tr>

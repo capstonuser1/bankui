@@ -26,7 +26,7 @@ export type User = {
   roles: string[];
 };
 
-export type TransactionStatus = 'COMPLETE' | 'FAILED';
+export type TransactionStatus = 'COMPLETED' | 'FAILED';
 export type TransactionType = 'TRANSFER' | 'DEPOSIT' | 'WITHDRAWAL' | 'TRANSFER_IN' | 'TRANSFER_OUT';
 
 export type Transaction = {
