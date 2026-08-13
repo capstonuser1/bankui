@@ -23,16 +23,34 @@ export default function Marquee({ messages = defaultMessages, speed = 220 }: { m
 
   // Measure content width and set CSS variables to ensure a seamless loop
   useEffect(() => {
-    const track = trackRef.current;
-    const inner = innerRef.current;
-    if (!track || !inner) return;
-    const w = inner.clientWidth;
-    if (!w) return;
-    // set track width to double the inner content so translateX(-50%) scrolls one copy
-    track.style.width = `${w * 2}px`;
-    // choose a base speed (seconds) proportional to content length, with a minimum
-    const secs = Math.max(10, Math.round(w / 60));
-    track.style.setProperty('--marquee-speed', `${secs}s`);
+    let attempts = 0;
+    const measure = () => {
+      attempts += 1;
+      const track = trackRef.current;
+      const inner = innerRef.current;
+      if (!track || !inner) {
+        if (attempts < 5) requestAnimationFrame(measure);
+        return;
+      }
+      const w = inner.clientWidth;
+      if (!w) {
+        if (attempts < 5) {
+          requestAnimationFrame(measure);
+          return;
+        }
+        // fallback: ensure track has at least double width so animation runs
+        track.style.width = '200%';
+        track.style.setProperty('--marquee-speed', `${speed}s`);
+        return;
+      }
+      // set track width to double the inner content so translateX(-50%) scrolls one copy
+      track.style.width = `${w * 2}px`;
+      // choose a base speed (seconds) proportional to content length, with a minimum
+      const secs = Math.max(10, Math.round(w / 60));
+      track.style.setProperty('--marquee-speed', `${secs}s`);
+    };
+    // measure on next frame to allow layout/fonts to settle
+    requestAnimationFrame(measure);
   }, [text]);
 
   // We render the content twice for a seamless loop

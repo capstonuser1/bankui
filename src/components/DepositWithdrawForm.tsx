@@ -103,16 +103,15 @@ export function DepositWithdrawForm({ accounts, onTransferComplete }: TransferFo
     }, [customerNumber]);
  if (error) return <p className="error">{error}</p>;
   return (
-   <section className="deposit-withdraw-form">
+    <section className="deposit-withdraw-form">
       <h2>Deposit / Withdraw</h2>
-      <form onSubmit={handleSubmit}>
-
-         <div className="form-group">
-          <label htmlFor="from-account">
-            Customers
-             </label>
+      <form onSubmit={handleSubmit} className="card deposit-card">
+        <div className="form-row columns">
+          <div className="form-group">
+            <label className="label" htmlFor="from-customer">Customer</label>
             <select
               id="from-customer"
+              className="select-3d input"
               value={customerNumber}
               onChange={handleCustomerChange}
               required
@@ -120,18 +119,17 @@ export function DepositWithdrawForm({ accounts, onTransferComplete }: TransferFo
               <option value="">-- Select --</option>
               {customers.map((a) => (
                 <option key={a.customerNumber} value={a.customerNumber}>
-                  {a.fullName}   {a.customerNumber}
+                  {a.fullName} — {a.customerNumber}
                 </option>
               ))}
             </select>
-         
-        </div>
-        <div className="form-group">
-          <label htmlFor="from-account">
-            Account
-             </label>
+          </div>
+
+          <div className="form-group">
+            <label className="label" htmlFor="from-account">Account</label>
             <select
               id="from-account"
+              className="select-3d input"
               value={fromAccount}
               onChange={(e) => setFromAccount(e.target.value)}
               required
@@ -143,30 +141,28 @@ export function DepositWithdrawForm({ accounts, onTransferComplete }: TransferFo
                 </option>
               ))}
             </select>
-         
+          </div>
         </div>
 
-        <div className="form-group">
-          <label htmlFor="action">
-            Action 
-          </label>
+        <div className="form-row columns">
+          <div className="form-group">
+            <label className="label" htmlFor="action">Action</label>
             <select
               id="action"
+              className="select-3d input"
               value={action}
               onChange={(e) => setAction(e.target.value as 'deposit' | 'withdraw')}
             >
               <option value="deposit">Deposit</option>
               <option value="withdraw">Withdraw</option>
             </select>
-           
-        </div>
+          </div>
 
-        <div className="form-group">
-          <label htmlFor="amount">
-            Amount
-             </label>
+          <div className="form-group">
+            <label className="label" htmlFor="amount">Amount</label>
             <input
               id="amount"
+              className="input"
               type="number"
               step="0.01"
               min="0"
@@ -174,7 +170,7 @@ export function DepositWithdrawForm({ accounts, onTransferComplete }: TransferFo
               onChange={(e) => setAmount(e.target.value)}
               required
             />
-         
+          </div>
         </div>
 
         <div className="button-group">
@@ -183,8 +179,8 @@ export function DepositWithdrawForm({ accounts, onTransferComplete }: TransferFo
           </button>
         </div>
 
-        {error && <p className="error">{error}</p>}
-        {success && <p className="success">{success}</p>}
+        {error && <div className="form-message error">{error}</div>}
+        {success && <div className="form-message success">{success}</div>}
       </form>
     </section>
   );

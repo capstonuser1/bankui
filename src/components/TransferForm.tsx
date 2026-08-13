@@ -134,84 +134,84 @@ export function TransferForm({ accounts, onTransferComplete }: TransferFormProps
   return (
     <section className="transfer-form">
       <h2>Account Operations</h2>
-      <form onSubmit={handleSubmit}>
-        <div className="form-row">
-          <label htmlFor="accountOperation">Select Operation</label>
-          <select
-            id="accountOperation"
-            className="select-3d"
-            value={accountOperation}
-            onChange={(e) => handleOperationChange(e.target.value as AccountOperation)}
-          >
-            <option value={AccountOperation.Transfer}>Transfer</option>
-            <option value={AccountOperation.ReviewTransactions}>Recent Transactions</option>
-          </select>
-        </div>
-        <div className="form-row">
-          <label htmlFor="fromAccount">From Account</label>
-          <select
-            id="fromAccount"
-            className="select-3d"
-            value={fromAccount}
-            onChange={(e) => handleFromAccountChange(e.target.value)}
-            required
-          >
-            <option value="">-- Select an account --</option>
-            {accounts.map((account) => (
-              <option key={account.accountNumber} value={account.accountNumber}>
-                {account.accountNumber} ({account.accountType}) - {formatCurrency(account.balance)}
-              </option>
-            ))}
-          </select>
+      <form onSubmit={handleSubmit} className="card transfer-card">
+        <div className="form-row columns">
+          <div className="form-group">
+            <label className="label" htmlFor="accountOperation">Operation</label>
+            <select
+              id="accountOperation"
+              className="select-3d input"
+              value={accountOperation}
+              onChange={(e) => handleOperationChange(e.target.value as AccountOperation)}
+            >
+              <option value={AccountOperation.Transfer}>Transfer</option>
+              <option value={AccountOperation.ReviewTransactions}>Recent Transactions</option>
+            </select>
+          </div>
+
+          <div className="form-group">
+            <label className="label" htmlFor="fromAccount">From Account</label>
+            <select
+              id="fromAccount"
+              className="select-3d input"
+              value={fromAccount}
+              onChange={(e) => handleFromAccountChange(e.target.value)}
+              required
+            >
+              <option value="">-- Select an account --</option>
+              {accounts.map((account) => (
+                <option key={account.accountNumber} value={account.accountNumber}>
+                  {account.accountNumber} ({account.accountType}) - {formatCurrency(account.balance)}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
 
-        <div className="form-row">
-          <label htmlFor="toAccount"
-            style={{ display: accountOperation === AccountOperation.ReviewTransactions ? 'none' : 'block' }}>
-            To Account Number
-          </label>
-          <input
-            id="toAccount"
-            type="text"
-            placeholder="Destination account number"
-            value={toAccount}
-            onChange={(e) => setToAccount(e.target.value)}
-            required
-            disabled={accountOperation === AccountOperation.ReviewTransactions}
-            style={{ display: accountOperation === AccountOperation.ReviewTransactions ? 'none' : 'block' }}
-          />
-        </div>
+        {accountOperation === AccountOperation.Transfer && (
+          <>
+            <div className="form-row columns">
+              <div className="form-group">
+                <label className="label" htmlFor="toAccount">To Account Number</label>
+                <input
+                  id="toAccount"
+                  className="input"
+                  type="text"
+                  placeholder="Destination account number"
+                  value={toAccount}
+                  onChange={(e) => setToAccount(e.target.value)}
+                  required
+                />
+              </div>
 
-        <div className="form-row">
-          <label htmlFor="amount"
-            style={{ display: accountOperation === AccountOperation.ReviewTransactions ? 'none' : 'block' }}>
-            Amount
-          </label>
-          <input
-            id="amount"
-            type="number"
-            step="0.01"
-            min="0.01"
-            placeholder="0.00"
-            value={amount}
-            onChange={(e) => setAmount(e.target.value)}
-            required
-            disabled={accountOperation === AccountOperation.ReviewTransactions}
-            style={{ display: accountOperation === AccountOperation.ReviewTransactions ? 'none' : 'block' }}
-          />
-        </div>
+              <div className="form-group">
+                <label className="label" htmlFor="amount">Amount</label>
+                <input
+                  id="amount"
+                  className="input"
+                  type="number"
+                  step="0.01"
+                  min="0.01"
+                  placeholder="0.00"
+                  value={amount}
+                  onChange={(e) => setAmount(e.target.value)}
+                  required
+                />
+              </div>
+            </div>
+          </>
+        )}
 
         <div className="button-group">
           <button type="submit" className="btn btn-large" disabled={submitting}>
             {submitting ? 'Submitting...' : accountOperation === AccountOperation.Transfer ? 'Transfer' : 'View Transactions'}
           </button>
-          {/* Todo: Add a reset button. on click it should reset the form fields . use the resetForm function */}
           <button type="button" className="btn secondary" onClick={resetForm} disabled={submitting}>
             Reset
           </button>
         </div>
 
-        {message && <p className={`form-message ${messageType}`}>{message}</p>}
+        {message && <div className={`form-message ${messageType}`}>{message}</div>}
       </form>
       {/* show transactions grid only when "Recent Transactions" is selected and a fromAccount is chosen and View transactions is clicked */}
       {accountOperation === AccountOperation.ReviewTransactions && fromAccount && showTransactions && (

@@ -38,6 +38,8 @@ export async function getAccounts(): Promise<Account[]> {
   const url = isPrivileged
     ? '/api/accounts'
     : `/api/accountsbysubject?subject=${encodeURIComponent(user.subject)}`;
+  
+    window.alert(user.subject); // Debugging line
 
   const response = await fetch(url, { headers: { Accept: 'application/json' } });
   if (!response.ok) {
@@ -159,5 +161,23 @@ export async function getAccountsbyCustomerId(customerNumber: string): Promise<A
     const message = await safeReadErrorMessage(response);
     throw new Error(message || `Accounts failed: ${response.status}`);
   }
+  return response.json();
+}
+
+export async function postAccountUpdateStatus(accountNumber: string, status: string): Promise<{ success?: boolean; message?: string }> {
+  const response = await fetch('/api/accountupdatestatus', {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ accountNumber, status }),
+  });
+
+  if (!response.ok) {
+    const message = await safeReadErrorMessage(response);
+    throw new Error(message || `Account update failed: ${response.status}`);
+  }
+
   return response.json();
 }

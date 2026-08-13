@@ -17,6 +17,7 @@ import { TransferForm } from './components/TransferForm';
 // import { CustomerTransactions } from './components/CustomerTransactions';
 import RecentTransactionsPage from './components/RecentTransactionsPage';
 import RightRail from './components/RightRail';
+import { PaymentUtility } from './components/PaymentUtility';
 import { useAuth } from './auth/AuthContext';
 import { SignInScreen } from './components/SignInScreen';
 import { DepositWithdrawForm } from './components/DepositWithdrawForm';
@@ -92,6 +93,7 @@ export function App() {
 
   return (
   <div className="app">
+    <BrowserRouter>
       <Header onToggleSidebar={() => setSidebarOpen((s) => !s)} sidebarOpen={sidebarOpen} />
       <Marquee />
      {user && (
@@ -102,9 +104,8 @@ export function App() {
          type={flashType ?? 'info'}
        />
      )}
-    <BrowserRouter>
       <div className={`app-layout ${sidebarOpen ? '' : 'sidebar-closed'}`}>
-        <aside className={`sidebar ${sidebarOpen ? '' : 'collapsed'}`}>
+        <aside className="sidebar">
           <Menu />
         </aside>
         <main>
@@ -123,6 +124,7 @@ export function App() {
                 element={<TransferForm accounts={accounts} onTransferComplete={loadAccounts} />}
               />
               <Route path="/recent-transactions" element={<RecentTransactionsPage />} />
+              <Route path="/payments" element={<PaymentUtility onPaymentComplete={loadAccounts} />} />
               <Route
                 path="/"
                 element={

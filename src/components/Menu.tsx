@@ -8,6 +8,7 @@ const menuConfig = [
   { to: "/", label: "Account Information", roles: ["teller", "account_holder"] }, // public / all authenticated users v"teller", "admin", "account_holder"
   { to: "/deposits", label: "Deposits and WithDrawals", roles: ["teller"] },
   { to: "/transactions", label: "Transfer", roles: ["account_holder"] },
+  { to: "/payments", label: "Payments", roles: ["account_holder"] },
   { to: "/recent-transactions", label: "Recent Transactions", roles: ["account_holder"] },
   { to: "/audits", label: "Auditor", roles: ["teller"] }
 ];
