@@ -53,6 +53,7 @@ export type TransferRequest = {
   fromAccountNumber: string;
   toAccountNumber: string;
   amount: number;
+  transactionType: TransactionType;
 };
 
 export type TransferResponse = {

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Account, Customer } from '../api/types';
-import { getAccountsbyCustomerId, getCustomers } from '../api/client.ts';
+import { getAccountsbyCustomerId,getCustomers, postTransaction } from '../api/client.ts';
 
 type TransferFormProps = {
   accounts: Account[];
@@ -42,9 +42,25 @@ export function DepositWithdrawForm({ accounts, onTransferComplete }: TransferFo
 
     setLoading(true);
     try {
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      setSuccess(`${action === 'deposit' ? 'Deposited' : 'Withdrew'} $${value.toFixed(2)}`);
-      setAmount('');
+
+       const result = await postTransaction({
+                fromAccountNumber: fromAccount,
+                toAccountNumber: fromAccount,
+                amount: parseFloat(amount),
+                transactionType: action === 'deposit' ? 'DEPOSIT' : 'WITHDRAWAL'
+              });
+
+                if (result.status === 'COMPLETE') {
+          setSuccess(`${action === 'deposit' ? 'Deposited' : 'Withdrew'} $${parseFloat(amount).toFixed(2)} transaction complete.`);          
+         setCustomerNumber('');
+          setCustomerAccounts([]);
+          setAmount('');
+          onTransferComplete();
+        } else {
+          setError('Transaction failed. Please try again.');
+         // setMessageType('error');
+        }
+     
       onTransferComplete();
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Unknown error');
