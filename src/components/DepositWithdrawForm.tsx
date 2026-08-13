@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import { Account } from '../api/types';
+import React, { useEffect, useState } from 'react';
+import { Account, Customer } from '../api/types';
+import { getAccountsbyCustomerId, getCustomers } from '../api/client.ts';
 
 type TransferFormProps = {
   accounts: Account[];
@@ -13,6 +14,20 @@ export function DepositWithdrawForm({ accounts, onTransferComplete }: TransferFo
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const [fromAccount, setFromAccount] = useState<string>('');
+   const [customerNumber, setCustomerNumber] = useState<string>('');
+   const [customers, setCustomers] = useState<Customer[]>([]);
+  const [customerAccounts, setCustomerAccounts] = useState<Account[]>([]);
+
+   const handleCustomerChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const selected = e.target.value;
+    setCustomerNumber(selected);
+    setFromAccount(''); // Reset the fromAccount when customer changes
+    // Immediately bind accounts from the provided `accounts` prop for snappy UI
+    const filtered = accounts.filter((a) => String(a.customerId) === selected);
+    setCustomerAccounts(filtered);
+    console.log(`Selected customer: ${selected}`);
+    console.log('Filtered accounts count:', filtered.length);
+  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -37,11 +52,64 @@ export function DepositWithdrawForm({ accounts, onTransferComplete }: TransferFo
       setLoading(false);
     }
   };
+  useEffect(() => {
+      const loadcustomers = async () => {
+        setLoading(true);
+        setError(null);
+        try {
+          const data = await getCustomers();
+          setCustomers(data);
+        } catch (e) {
+          setError(e instanceof Error ? e.message : 'Unknown error occurred');
+        } finally {
+          setLoading(false);
+        }
+      };
+      loadcustomers();
+    }, []);
+    useEffect(() => {
+      if (customerNumber) {
+        const loadCustomerAccounts = async () => {
+          setLoading(true);
+          setError(null);
+          try {
+            const data = await getAccountsbyCustomerId(customerNumber);
+            console.log(`Loaded accounts for customer ${customerNumber}:`, data);
+            setCustomerAccounts(data);
+          } catch (e) {
+            setError(e instanceof Error ? e.message : 'Unknown error occurred');
+          } finally {
+            setLoading(false);
+          }
+        };
+        loadCustomerAccounts();
+      }
+    }, [customerNumber]);
  if (error) return <p className="error">{error}</p>;
   return (
    <section className="deposit-withdraw-form">
       <h2>Deposit / Withdraw</h2>
       <form onSubmit={handleSubmit}>
+
+         <div className="form-group">
+          <label htmlFor="from-account">
+            Customers
+             </label>
+            <select
+              id="from-customer"
+              value={customerNumber}
+              onChange={handleCustomerChange}
+              required
+            >
+              <option value="">-- Select --</option>
+              {customers.map((a) => (
+                <option key={a.customerNumber} value={a.customerNumber}>
+                  {a.fullName}   {a.customerNumber}
+                </option>
+              ))}
+            </select>
+         
+        </div>
         <div className="form-group">
           <label htmlFor="from-account">
             Account
@@ -53,9 +121,9 @@ export function DepositWithdrawForm({ accounts, onTransferComplete }: TransferFo
               required
             >
               <option value="">-- Select --</option>
-              {accounts.map((a) => (
-                <option key={a.id} value={a.id}>
-                  {a.id} ({a.accountType}, ${a.balance.toFixed(2)})
+              {customerAccounts.map((a) => (
+                <option key={a.accountNumber} value={a.accountNumber}>
+                  {a.accountNumber} ({a.accountType}, ${a.balance.toFixed(2)})
                 </option>
               ))}
             </select>

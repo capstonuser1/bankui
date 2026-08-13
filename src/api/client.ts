@@ -8,11 +8,11 @@
  * function signatures.
  */
 
-import type { Account, TransactionList, TransferRequest, TransferResponse, User } from './types';
+import { Account, Customer, TransactionList, TransferRequest, TransferResponse, User } from './types';
 
 export async function getCurrentUser(): Promise<User | null> {
   const response = await fetch('/api/me', { headers: { Accept: 'application/json' } });
-
+ 
   if (!response.ok) {
     throw new Error(`Failed to load current user: ${response.status}`);
   }
@@ -99,4 +99,50 @@ export async function getFlashMessage(): Promise<string> {
   }
   else { return data; }
   //throw new Error('Invalid response format for flash message');
+}
+
+export async function postTransaction(request: TransferRequest): Promise<TransferResponse> {
+  const response = await fetch('/api/transactions', {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(request),
+  });
+  if (!response.ok) {
+    const message = await safeReadErrorMessage(response);
+    throw new Error(message || `Transfer failed: ${response.status}`);
+  }
+  return response.json();
+}
+
+ 
+export async function getCustomers(): Promise<Customer[]> {
+  const response = await fetch('/api/customers', {
+    method: 'GET',
+    headers: {
+      Accept: 'application/json'
+      
+    },
+  });
+  if (!response.ok) {
+    const message = await safeReadErrorMessage(response);
+    throw new Error(message || `Transfer failed: ${response.status}`);
+  }
+  return response.json();
+}
+export async function getAccountsbyCustomerId(customerNumber: string): Promise<Account[]> {
+  const response = await fetch(`/api/${customerNumber}/accounts`, {
+    method: 'GET',
+    headers: {
+      Accept: 'application/json'
+      
+    },
+  });
+  if (!response.ok) {
+    const message = await safeReadErrorMessage(response);
+    throw new Error(message || `Accounts failed: ${response.status}`);
+  }
+  return response.json();
 }

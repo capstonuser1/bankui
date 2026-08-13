@@ -59,3 +59,12 @@ export type TransferResponse = {
   transactionId: string;
   status: TransactionStatus;
 };
+
+export type  Customer = {
+  customerId: number;
+  customerNumber: string;
+  fullName: string;
+  email: string;
+  createdDate: Date;
+};
+

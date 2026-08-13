@@ -27,7 +27,7 @@ const Menu = () => {
     }
     return [];
   })();
-  console.log("Test Roles" + userRoles);
+
   const hasAccess = (roles: string[]) =>
     roles.length === 0 || roles.some((r) => userRoles.includes(r));
 
