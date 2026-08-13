@@ -68,3 +68,14 @@ export type Customer = {
   createdDate: Date;
 };
 
+export type AuditorData = {
+  transactionId: string;
+  accountNumber: string;
+  customerName: string;
+  transactionType: TransactionType;
+  amount: number;
+  transactionStatus: TransactionStatus;
+  transactionDate: string;
+  description: string;
+  createdDate: Date;
+};
