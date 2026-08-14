@@ -39,18 +39,23 @@ export function App() {
   const [flashType, setFlashType] = useState<string | null>(null);
   const [flashError, setFlashError] = useState<string | null>(null);
   const [visible, setVisible] = useState<boolean>(false);
-  const [auditorData, setAuditorData] = useState<AuditorData[]>([]);
+  const [auditorData, _setAuditorData] = useState<AuditorData[]>([]);
   const loadFlashMessage = useCallback(async () => {
     try {
       const flashMsg = await getFlashMessage();
-      setFlashMessage(flashMsg ? flashMsg : "default message" );
-      setFlashType(flashMsg ? 'warning' : 'info');
+      if (flashMsg && flashMsg.length > 0) {
+        setFlashMessage(flashMsg);
+        setFlashType('warning');
+      } else {
+        setFlashMessage("Please note that the bank website will be unavailable due to maintenance from 2 AM to 4 AM UTC.");
+        setFlashType("info");
+      }
       setFlashError(null);
     } catch (e) {
       const message = e instanceof Error ? e.message : 'Unknown error';
       setFlashError(message);
-      setFlashMessage(null);
-      setFlashType('error');
+      setFlashMessage("Please note that the bank website will be unavailable due to maintenance from 2 AM to 4 AM UTC.");
+      setFlashType('info');
       console.error('Flash message error:', message);
     }
   }, []);
@@ -85,13 +90,14 @@ export function App() {
       return;
     }
 
+    console.log('Flash message set:', flashMessage, 'Type:', flashType);
     setVisible(true);
     const timer = window.setTimeout(() => {
       setVisible(false);
     }, 10000);
 
     return () => window.clearTimeout(timer);
-  }, [flashMessage]);
+  }, [flashMessage, flashType]);
 
   return (
   <div className="app">

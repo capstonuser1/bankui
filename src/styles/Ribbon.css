@@ -1,9 +1,75 @@
-.floating-ribbon { position: fixed; top: 12px; left: 50%; transform: translateX(-50%); z-index: 9999; }
+.floating-ribbon {
+  position: fixed;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  padding: 12px 20px;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  max-width: 80%;
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
 
 /* status helpers (colors are set in App.css via .floating-ribbon base) */
-.floating-ribbon.success { background: linear-gradient(90deg, rgba(16,185,129,0.08), rgba(6,78,59,0.03)); color: #064e3b; }
-.floating-ribbon.warning { background: linear-gradient(90deg, rgba(253,186,116,0.08), rgba(237,108,2,0.03)); color: #663c00; }
-.floating-ribbon.info { background: linear-gradient(90deg, rgba(31,111,235,0.08), rgba(5,42,109,0.03)); color: #072a6d; }
-.floating-ribbon.error { background: linear-gradient(90deg, rgba(220,38,38,0.08), rgba(139,0,0,0.03)); color: #7f1d1d; }
+.floating-ribbon.success {
+  background: linear-gradient(90deg, rgba(16,185,129,0.9), rgba(6,78,59,0.8));
+  color: #fff;
+  border-left: 4px solid #10b981;
+}
 
-.close-btn { margin-left: 0.5rem; }
+.floating-ribbon.warning {
+  background: linear-gradient(90deg, rgba(253,186,116,0.9), rgba(237,108,2,0.8));
+  color: #fff;
+  border-left: 4px solid #f59e0b;
+}
+
+.floating-ribbon.info {
+  background: linear-gradient(90deg, rgba(31,111,235,0.9), rgba(5,42,109,0.8));
+  color: #fff;
+  border-left: 4px solid #3b82f6;
+}
+
+.floating-ribbon.error {
+  background: linear-gradient(90deg, rgba(220,38,38,0.9), rgba(139,0,0,0.8));
+  color: #fff;
+  border-left: 4px solid #ef4444;
+}
+
+.ribbon-message {
+  flex: 1;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.close-btn {
+  margin-left: 0.5rem;
+  padding: 4px 8px;
+  background: transparent;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  font-size: 20px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.close-btn:hover {
+  opacity: 0.7;
+}

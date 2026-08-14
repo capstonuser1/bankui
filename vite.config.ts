@@ -12,6 +12,9 @@ export default defineConfig({
       '/oauth2': { target: 'http://localhost:8080', changeOrigin: false },
       '/login': { target: 'http://localhost:8080', changeOrigin: false },
       '/logout': { target: 'http://localhost:8080', changeOrigin: false },
+      // Proxy payments requests to the payments service to avoid CORS in dev
+      '/payments': { target: 'http://localhost:8090', changeOrigin: true },
+      '/registersubs': { target: 'http://localhost:8090', changeOrigin: true },
     },
   },
 });

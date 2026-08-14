@@ -62,8 +62,8 @@ export async function getAuditTransactions(): Promise<AuditorData[]> {
   // return response.filter((transaction) => transaction.accountId === accountId);
   //todo: generate dummy data for auditor transactions
   const dummyTransactions: AuditorData[] = [
-    { transactionId: '1', customerName: 'Bob', accountNumber: '101-1010-11', transactionType: 'DEPOSIT', amount: 100, transactionStatus: 'COMPLETE', transactionDate: '2023-01-01', description: '', createdDate: new Date('2023-01-01') },
-    { transactionId: '1', customerName: 'Alice', accountNumber: '101-1010-12', transactionType: 'DEPOSIT', amount: 200, transactionStatus: 'COMPLETE', transactionDate: '2023-01-02', description: '', createdDate: new Date('2023-01-02') },
+    { transactionId: '1', customerName: 'Bob', accountNumber: '101-1010-11', transactionType: 'DEPOSIT', amount: 100, transactionStatus: 'COMPLETED', transactionDate: '2023-01-01', description: '', createdDate: new Date('2023-01-01') },
+    { transactionId: '1', customerName: 'Alice', accountNumber: '101-1010-12', transactionType: 'DEPOSIT', amount: 200, transactionStatus: 'COMPLETED', transactionDate: '2023-01-02', description: '', createdDate: new Date('2023-01-02') },
   ]
   const response = dummyTransactions;
   // const url = `/api/accounts/auditTransactions`;
@@ -116,20 +116,21 @@ async function safeReadErrorMessage(response: Response): Promise<string | null> 
   }
 }
 export async function getFlashMessage(): Promise<string> {
-  const response = await fetch('/api/flashmessage', {
-    headers: { Accept: 'application/json' },
-  });
-  if (!response.ok) {
-    throw new Error(`Failed to load flash message: ${response.status}`);
+  try {
+    const response = await fetch('/api/flashmessage', {
+      headers: { Accept: 'application/json' },
+    });
+    if (!response.ok) {
+      console.warn(`Failed to load flash message: ${response.status}`);
+      return '';
+    }
+    const data = await response.text();
+    console.log("Ribbon message data:", data);
+    return data && typeof data === 'string' ? data.trim() : '';
+  } catch (error) {
+    console.error('Error fetching flash message:', error);
+    return '';
   }
-  //console.log("Ribbon message response:", await response.text());
-  const data = await response.text();
-  console.log("Ribbon message data:", data);
-  if (typeof data === 'string') {
-    return data;
-  }
-  else { return data; }
-  //throw new Error('Invalid response format for flash message');
 }
 
 export async function postTransaction(request: TransferRequest): Promise<TransferResponse> {
@@ -193,5 +194,73 @@ export async function postAccountUpdateStatus(accountNumber: string, status: str
     throw new Error(message || `Account update failed: ${response.status}`);
   }
 
+  return response.json();
+}
+
+type Payment = Record<string, unknown>;
+
+export async function getPayments(): Promise<Payment[]> {
+  const response = await fetch('/payments', {
+    method: 'GET',
+    headers: {
+      Accept: 'application/json',
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to load payments: ${response.status}`);
+  }
+
+  return response.json();
+}
+
+export async function postPayment(request: Payment): Promise<Payment> {
+  const response = await fetch('/payments', {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(request),
+  });
+
+  if (!response.ok) {
+    const message = await safeReadErrorMessage(response);
+    throw new Error(message || `Payment failed: ${response.status}`);
+  }
+
+  return response.json();
+}
+
+// Register subscriptions API helpers
+export type RegisterSub = {
+  id?: string;
+  customerNumber?: string;
+  plan?: string;
+  startDate?: string;
+  [key: string]: unknown;
+};
+
+export async function getRegisterSubs(): Promise<RegisterSub[]> {
+  const response = await fetch('/registersubs', {
+    method: 'GET',
+    headers: { Accept: 'application/json' },
+  });
+  if (!response.ok) {
+    throw new Error(`Failed to load register subs: ${response.status}`);
+  }
+  return response.json();
+}
+
+export async function postRegisterSub(payload: RegisterSub): Promise<RegisterSub> {
+  const response = await fetch('/registersubs', {
+    method: 'POST',
+    headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  });
+  if (!response.ok) {
+    const message = await safeReadErrorMessage(response);
+    throw new Error(message || `Register sub failed: ${response.status}`);
+  }
   return response.json();
 }

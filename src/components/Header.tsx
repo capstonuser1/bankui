@@ -42,7 +42,7 @@ export function Header({ onToggleSidebar, sidebarOpen = true }: HeaderProps) {
         </div>
         {user && (
           <div className="header-user">
-            <span className="user-name">Welcome, {user.preferredUsername}</span>
+            <span className="user-name">Welcome, {user.fullName} ({user.preferredUsername})</span>
             <button type="button" className="sign-out-button btn ghost" onClick={handleLogout}>
               Sign Out
             </button>

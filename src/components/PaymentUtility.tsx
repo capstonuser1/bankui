@@ -1,7 +1,6 @@
-
 import React, { useEffect, useState } from 'react';
 import { Account, Customer } from '../api/types';
-import { getCustomers, getAccountsbyCustomerId, postTransfer } from '../api/client.ts';
+import { getCustomers, getAccountsbyCustomerId, postPayment } from '../api/client.ts';
 import '../styles/PaymentUtility.css';
 
 type PaymentUtilityProps = {
@@ -162,11 +161,10 @@ export function PaymentUtility({ onPaymentComplete }: PaymentUtilityProps) {
         toAccountNum = toAccount || 'SCHEDULED';
       }
 
-      await postTransfer({
-        fromAccountNumber: fromAccount,
-        toAccountNumber: toAccountNum,
+      await postPayment({
+        
         amount: value,
-        transactionType: transactionTypeValue,
+        reference : paymentType === 'bill-payment' ? `${selectedUtility.toUpperCase()}_${utilityAccountNumber}` : 'N/A',
       });
 
       const typeLabel = 
